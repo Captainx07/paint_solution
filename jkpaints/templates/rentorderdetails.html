@@ -1,0 +1,95 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Rent Order Details</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+          <a href="/rentorderdetailsadd/">
+            <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+          </a>
+          <thead>
+            <tr style="color:black ;">
+              <th>Rent Order Details Id</th>
+              <th>Rent Order Id</th>
+              <th>Rent Machinary</th>
+              <th>Description</th>
+              <th>Requirement Days</th>
+              <th>Return Date</th>
+              <th>Rent Change</th>
+              <th>Option </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in RentOrderDetails %}
+            <tr>
+              <td>{{ i.rent_od_id}}</td>
+              <td>{{i.rent_o_id}}</td>
+              <td>{{i.rent_m_id}}</td>
+              <td>{{i.description}}</td>
+              <td>{{i.requirement_days}}</td>
+              <td>{{i.return_date}}</td>
+              <td>{{i.rent_m_charge}}</td>
+              <td><a href="/rentorderdetailsdelete/{{ i.rent_od_id}}/"><button type="button"
+                    class="btn bg-gradient-primary text-white">Delete</button></a>
+                <a href="/rentorderdetailsedit/{{ i.rent_od_id}}/"><button type="button"
+                    class="btn bg-gradient-primary text-white">Edit</button></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RENT ORDER DETAILS</title>
+</head>
+<body>
+<h1><center>RENT ORDER DETAILS</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>RENT ORDER DETAILS ID</th>
+            <th>RENT ORDER ID</th>
+            <th>RENT MACHINERY</th>
+            <th>DESCRIPTION</th>
+            <th>REQUIREMENT DAYS</th>
+            <th>RETURN DATE</th>
+            <th>RENT CHARGE</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in RentOrderDetails %}
+        <tr>
+            <td>{{ i.rent_od_id}}</td>
+            <td>{{i.rent_o_id}}</td>
+            <td>{{i.rent_m_id}}</td>
+            <td>{{i.description}}</td>
+            <td>{{i.requirement_days}}</td>
+            <td>{{i.return_date}}</td>
+            <td>{{i.rent_m_charge}}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

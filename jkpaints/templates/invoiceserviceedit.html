@@ -1,0 +1,56 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Invoice Service </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <form class="table-responsive" method="post"
+                    action="/invoiceserviceupdate/{{invoiceservice.invoice_s_id}}/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="invoice">invoice Id</label>
+                        <select class="form-control form-control-lg" id="invoice" name="invoice_id">
+                            {% for i in invoice %}
+                            {% if i.invoice_id == invoiceservice.invoice_id %}
+                            <option value="{{i.invoice_id}}" selected>{{i.invoice_id}}</option>
+                            {%else%}
+                            <option value="{{i.invoice_id}}">{{i.invoice_id}}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <label for="Service">Service Name</label>
+                    <select class="form-control form-control-lg" id="Service" name="service_id">
+                        {% for i in service %}
+                        {% if i.service_id == invoiceservice.service_id %}
+                        <option value="{{i.service_id}}" selected>{{i.service_name}}</option>
+                        {%else%}
+                        <option value="{{i.service_id}}">{{i.service_name}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="Dimension">Dimension</label>
+                <input type="number" class="form-control" id="Dimension" placeholder="Enter Dimension " name="txtdime"
+                    value="{{invoiceservice.dimension}}" required>
+            </div>
+            <div class="form-group">
+                <label for="Charge">Service Charge</label>
+                <input type="number" class="form-control" id="Charge" placeholder="Enter Service Charge" name="txtchare"
+                    value="{{invoiceservice.service_charge}}" required>
+            </div>
+            <button type="submit" class="btn  bg-gradient-primary text-white">Update</button>
+            <button class="btn btn-light">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

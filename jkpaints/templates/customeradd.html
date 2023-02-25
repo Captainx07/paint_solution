@@ -1,0 +1,89 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Customer</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/customeradd/" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="Customer_name">Customer Name</label>
+            <input type="text" class="form-control" id="Customer_name" placeholder="Enter Customer Name"
+              name="txtcusname" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleTextarea1">Address</label>
+            <textarea class="form-control" id="exampleTextarea1" rows="4" name="txtcusadd" required></textarea>
+
+          </div>
+          <div class="form-group">
+            <label for="Contact_number">Contact Number</label>
+            <input type="number" class="form-control" id="Contact_number" placeholder="Enter Contact Number"
+              name="txtcuscon" required maxlength="10">
+          </div>
+          <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="email" class="form-control" id="Email" placeholder="Enter Email Id" name="txtcusemail"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="Password">Password</label>
+            <input type="password" class="form-control" id="Password" placeholder="Enter Password" name="txtcuspass"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="Pin_code">Pin Code</label>
+            <select class="form-control form-control-lg" id="Pin_code" name="pin_code">
+              {% for i in area %}
+              <option value="{{i.pin_code}}">{{i.pin_code}}</option>
+              {% endfor %}
+            </select>
+          </div>
+            <div class="form-group">
+              <label for="img_url">Add image</label>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="img_url" name="image">
+                  <label class="custom-file-label" for="img_url">Add image...</label>
+              </div>
+            </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
+          <button class="btn btn-light">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CUSTOMER ADD</title>
+</head>
+<body>
+<h1><center>CUSTOMER ADD</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/customeradd/">
+    {% csrf_token %}
+    Customer name:<input type="text" name="txtcusname" required ><br>
+    Address:<input type="text" name="txtcusadd" required ><br>
+    Contact number:<input type="number" name="txtcuscon" required maxlength="10"><br>
+    Email id:<input type="email" name="txtcusemail" required ><br>
+    Password:<input type="password" name="txtcuspass" required><br>
+    Pin code:<select name="pin_code">
+    {% for i in area %}
+    <option value="{{i.pin_code}}">{{i.pin_code}}</option>
+    {% endfor %}
+    </select>
+    <br><input type="submit" value="Add">
+</form>
+</body>
+</html>

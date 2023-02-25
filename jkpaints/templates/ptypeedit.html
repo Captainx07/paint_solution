@@ -1,0 +1,49 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Type</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/ptypeupdate/{{ptype.type_id}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="pname">Product Type Name</label>
+            <input type="text" class="form-control" id="pname" placeholder="Enter Product Type Name" name="txtptname"
+              value="{{ptype.type_name}}" required>
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">update</button>
+          <button class="btn btn-light">Cancel</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT TYPE EDIT</title>
+</head>
+<body>
+<h1><center>PRODUCT TYPE EDIT</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/ptypeupdate/{{ptype.type_id}}/">
+    {% csrf_token %}
+    Product type name:<input type="text" name="txtptname" value="{{ptype.type_name}}" required><br>
+            <input type="submit" value="Update">
+</form>
+</body>
+</html>

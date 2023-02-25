@@ -1,0 +1,81 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Area</h6>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+        <a href="/areaadd/">
+          <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+        </a>
+        <thead>
+          <tr style="color:black ;">
+            <th>Pin Code</th>
+            <th>Area Name</th>
+            <th>City Name</th>
+            <th>Option</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in Area %}
+          <tr style="color: black;">
+            <td>{{ i.pin_code}}</td>
+            <td>{{i.area_name}}</td>
+            <td>{{i.city}}</td>
+            <td><a href="/areadelete/{{ i.pin_code}}/"><button type="button"
+                  class="btn bg-gradient-primary text-white">Delete</button></a>
+              <a href="/areaedit/{{ i.pin_code}}/"><button type="button"
+                  class="btn bg-gradient-primary text-white">Edit</button></a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AREA</title>
+</head>
+<body>
+<h1><center>AREA</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>PIN CODE</th>
+            <th>AREA NAME</th>
+            <th>CITY ID</th>
+            <th>OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in Area %}
+        <tr>
+            <td>{{ i.pin_code}}</td>
+            <td>{{i.area_name}}</td>
+            <td>{{i.city_id}}</td>
+            <td><a href="/areadelete/{{ i.pin_code}}/">Delete</a>||<a href="/areaedit/{{ i.pin_code}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+
+</body>
+</html>
+-->

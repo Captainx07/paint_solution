@@ -1,0 +1,95 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Machinery</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+          <a href="/machineryadd/">
+            <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+          </a>
+          <thead>
+            <tr style="color:black ;">
+              <th>Machinery Id</th>
+              <th>Machinery Name</th>
+              <th>Description</th>
+              <th>Machinery Rent Charge</th>
+              <th>Machinery Work</th>
+              <th>Machinery Image</th>
+              <th>Option</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in Machinery %}
+            <tr style="color:black ;">
+              <td>{{i.m_id}}</td>
+              <td>{{i.m_name}}</td>
+              <td>{{i.description}}</td>
+              <td>{{i.rent_charge}}</td>
+              <td>{{i.machinery_work}}</td>
+              <td>{{i.image}}</td>
+              <td><a href="/machinerydelete/{{i.m_id}}/"><button type="button"
+                    class="btn  bg-gradient-primary text-white">Delete</button></a>
+                <a href="/machineryedit/{{i.m_id}}/"><button type="button"
+                    class="btn  bg-gradient-primary text-white">Edit</button></a>
+              </td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MACHINERY</title>
+</head>
+<body>
+<h1><center>MACHINERY</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+            <thead>
+            <tr>
+                <th>MACHINERY ID</th>
+                <th>MACHINERY NAME</th>
+                <th>DESCRIPTION</th>
+                <th>MACHINERY RENT CHARGE</th>
+                <th>MACHINERY WORK</th>
+                <th>MACHINERY IMAGE</th>
+                <th>OPTION</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for i in Machinery %}
+            <tr>
+                <td>{{i.m_id}}</td>
+                <td>{{i.m_name}}</td>
+                <td>{{i.description}}</td>
+                <td>{{i.rent_charge}}</td>
+                <td>{{i.machinery_work}}</td>
+                <td>{{i.image}}</td>
+                <td><a href="/machinerydelete/{{ i.m_id}}/">Delete</a>||<a href="/machineryedit/{{ i.m_id}}/">Edit</a></td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+
+</table>
+</center>
+</body>
+</html>

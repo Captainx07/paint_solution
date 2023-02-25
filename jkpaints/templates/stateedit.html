@@ -1,0 +1,49 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">State</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/stateadd/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="form_name">state Name</label>
+            <input type="text" class="form-control" id="form_name" placeholder="Enter state" name="txtsname"
+              value="{{state.state_name}}" required>
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Update</button>
+          <button class="btn btn-light">Cancel</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>STATE EDIT</title>
+</head>
+<body>
+<h1><center>STATE EDIT</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/stateupdate/{{state.state_id}}/">
+    {% csrf_token %}
+    State name:<input type="text" name="txtsname" value="{{state.state_name}}" required><br>
+            <input type="submit" value="Update">
+</form>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Payment </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/paymentupdate/{{payment.payment_id}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <div class="form-group">
+              <label for="invoice">invoice Id</label>
+              <select class="form-control form-control-lg" id="invoice" name="invoice_id">
+                {% for i in invoice %}
+                {% if i.invoice_id == payment.invoice_id %}
+                <option value="{{i.state_id}}" selected>{{i.invoice_id}}</option>
+                {%else%}
+                <option value="{{i.invoice_id}}">{{i.invoice_id}}</option>
+                {% endif %}
+
+                {% endfor %}
+              </select>
+              <div class="form-group">
+                <label for="Date">Payment Date</label>
+                <input type="date" class="form-control" id="Date" placeholder="Enter Payment Date" name="txtpdate"
+                  value="{{payment.p_date}}" required>
+              </div>
+              <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" class="form-control" id="amount" placeholder="Enter Payment Amount"
+                  name="txtamount" value="{{payment.amount}}" required>
+              </div><br>
+              <button type="submit" class="btn bg-gradient-primary text-white">Update</button>
+              <button class="btn btn-light">Cancel</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

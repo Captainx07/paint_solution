@@ -1,0 +1,104 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Order</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+          <a href="/productorderadd/">
+            <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+          </a>
+          <thead>
+            <tr style="color:black ;">
+              <th>Product Order Id</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Offer</th>
+              <th>Total Amount</th>
+              <Th>Shipping/Handling</Th>
+              <th>Track Url</th>
+              <th>Track Number</th>
+              <th>Option</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for i in ProductOrder %}
+            <tr style="color:black ;">
+              <td>{{i.product_o_id}}</td>
+              <td>{{i.customer_id}}</td>
+              <td>{{i.date}}</td>
+              <td>{{i.offer}}</td>
+              <td>{{i.total}}</td>
+              <td>{{i.shipping_handling}}</td>
+              <td>{{i.track_url}}</td>
+              <td>{{i.track_no}}</td>
+              <td><a href="/productorderdelete/{{ i.product_o_id}}/"><button type="button"
+                    class="btn  bg-gradient-primary text-white">Delete</button></a>
+                <a href="/productorderedit/{{ i.product_o_id}}/"><button type="button"
+                    class="btn  bg-gradient-primary text-white">Edit</button></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT ORDER</title>
+</head>
+<body>
+<h1><center>PRODUCT ORDER</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+  <thead>
+  <tr>
+    <th>PRODUCT ORDER ID</th>
+    <th>CUSTOMER</th>
+    <th>DATE</th>
+    <th>OFFER</th>
+    <th>TOTAL AMOUNT</th>
+    <Th>SHIPPING/HANDLING</Th>
+    <th>TRACK URL</th>
+    <th>TRACK NUMBER</th>
+  </tr>
+  </thead>
+
+    <tbody>
+    {% for i in ProductOrder %}
+    <tr>
+      <td>{{i.product_o_id}}</td>
+      <td>{{i.customer_id}}</td>
+      <td>{{i.date}}</td>
+      <td>{{i.offer}}</td>
+      <td>{{i.total}}</td>
+      <td>{{i.shipping_handling}}</td>
+      <td>{{i.track_url}}</td>
+      <td>{{i.track_no}}</td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+
+
+
+</table>
+</center>
+</body>
+</html>

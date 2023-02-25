@@ -1,0 +1,104 @@
+{% extends "m1.html" %}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Admin</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/adminadd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Admin Id</th>
+                            <th>Admin Name</th>
+                            <th>Password</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in Admin %}
+                        <tr style="color: black;">
+                            <td>{{i.admin_id}}</td>
+                            <td>{{i.admin_name}}</td>
+                            <td>*******</td>
+                            
+                            <td><a href="/admindelete/{{ i.admin_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/adminedit/{{ i.admin_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock data %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ADMIN</title>
+</head>
+<body>
+<h1><center>ADMIN</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ADMIN ID</th>
+            <th>ADMIN NAME</th>
+            <th>PASSWORD</th>
+            <th>OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in Admin %}
+        <tr>
+            <td>{{i.admin_id}}</td>
+            <td>{{i.admin_name}}</td>
+            <td>{{i.password}}</td>
+            <td><a href="/admindelete/{{ i.admin_id}}/">Delete</a>||<a href="/adminedit/{{ i.admin_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+
+</body>
+</html>
+
+-->

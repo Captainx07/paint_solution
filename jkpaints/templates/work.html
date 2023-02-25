@@ -1,0 +1,76 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Work</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/workadd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Work Id</th>
+                            <th>Work Name</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in Work %}
+                        <tr style="color:black ;">
+                            <td>{{ i.work_id}}</td>
+                            <td>{{i.work_name}}</td>
+                            <td><a href="/workdelete/{{i.work_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/workedit/{{i.work_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WORK</title>
+</head>
+<body>
+<h1><center>WORK</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>WORK ID</th>
+            <th>WORK NAME</th>
+            <th>OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in Work %}
+        <tr>
+            <td>{{ i.work_id}}</td>
+            <td>{{i.work_name}}</td>
+            <td><a href="/workdelete/{{ i.work_id}}/">Delete</a>||<a href="/workedit/{{ i.work_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

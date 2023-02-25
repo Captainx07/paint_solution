@@ -1,0 +1,147 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">product </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/productadd/" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="product_name">Product Name</label>
+            <input type="text" class="form-control" id="product_name" placeholder="Enter Product Name" name="txtpname"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" class="form-control" id="description" placeholder="Enter Description" name="txtdescri"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">Brand Name</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect1" name="brand_id">
+              <option value="0">--Select--</option>
+              {% for i in brand %}
+              <option value="{{i.brand_id}}">{{i.brand_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect2">Product Category</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect2" name="p_category_id">
+              <option value="0">--Select--</option>
+              {% for i in pcategory %}
+              <option value="{{i.p_category_id}}">{{i.p_category_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect3">Product Type</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect3" name="type_id">
+              <option value="0">--Select--</option>
+              {% for i in ptype %}
+              <option value="{{i.type_id}}">{{i.type_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect4">Product Form</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect4" name="form_id">
+              <option value="0">--Select--</option>
+              {% for i in pform %}
+              <option value="{{i.form_id}}">{{i.form_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect5">Product Finish</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect5" name="finish_id">
+              <option value="0">--Select--</option>
+              {% for i in pfinish %}
+              <option value="{{i.finish_id}}">{{i.finish_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Material">Material</label>
+            <input type="text" class="form-control" id="Material" placeholder="Enter Material" name="txtmate" value="0">
+          </div>
+          <div class="form-group">
+            <label for="Covering_Capacity">Covering Capacity</label>
+            <input type="number" class="form-control" id="Covering_Capacity" placeholder="Enter Covering Capacity"
+              name="txtcc" value="0">
+          </div>
+          <div class="form-group">
+            <label for="img_url">Add image</label>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="img_url" name="image">
+                <label class="custom-file-label" for="img_url">Add image...</label>
+            </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
+          <button class="btn btn-light">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT ADD</title>
+</head>
+<body>
+<h1><center>PRODUCT ADD</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/productadd/">
+    {% csrf_token %}
+    Product name:<input type="text" name="txtpname" required ><br>
+    Description:<input type="text" name="txtdescri" required ><br>
+    Brand name:<select name="brand_id">
+     <option value="0">--Select--</option>
+    {% for i in brand %}
+    <option value="{{i.brand_id}}">{{i.brand_name}}</option>
+    {% endfor %}
+    </select><br>
+    Product category:<select name="p_category_id">
+     <option value="0">--Select--</option>
+    {% for i in pcategory %}
+    <option value="{{i.p_category_id}}">{{i.p_category_name}}</option>
+    {% endfor %}
+    </select><br>
+    Product type:<select name="type_id">
+     <option value="0">--Select--</option>
+    {% for i in ptype %}
+    <option value="{{i.type_id}}">{{i.type_name}}</option>
+    {% endfor %}
+    </select><br>
+    Product form:<select name="form_id">
+     <option value="0">--Select--</option>
+    {% for i in pform %}
+    <option value="{{i.form_id}}">{{i.form_name}}</option>
+    {% endfor %}
+    </select><br>
+    Product finish:<select name="finish_id">
+     <option value="0">--Select--</option>
+    {% for i in pfinish %}
+    <option value="{{i.finish_id}}">{{i.finish_name}}</option>
+    {% endfor %}
+    </select><br>
+    Material:<input type="text" name="txtmate" value="0"><br>
+    Covering Capacity:<input type="numbar" name="txtcc" value="0"><br>
+    Image:<input type="text" name="txtimage" value="0"><br>
+    <br><input type="submit" value="Add">
+</form>
+</body>
+</html>

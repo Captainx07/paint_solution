@@ -1,0 +1,90 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Service Order Details</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+          <a href="/serviceorderdetailsadd/">
+            <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+          </a>
+          <thead>
+            <tr style="color:black ;">
+              <th>Service Order Details Id</th>
+              <th>Service Order Id</th>
+              <th>Service Id</th>
+              <th>Description</th>
+              <th>Estimated Dimension</th>
+              <th>Service Change</th>
+              <th>Option</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in ServiceOrderDetails %}
+            <tr style="color:black ;">
+              <td>{{ i.service_od_id}}</td>
+              <td>{{i.service_o_id}}</td>
+              <td>{{i.service_id}}</td>
+              <td>{{i.description}}</td>
+              <td>{{i.estimated_dimension}}</td>
+              <td>{{i.service_charge}}</td>
+              <td><a href="/serviceorderdetailsdelete/{{ i.service_od_id}}/"><button type="button"
+                    class="btn bg-gradient-primary text-white">Delete</button></a>
+                <a href="/serviceorderdetailsedit/{{ i.service_od_id}}/"><button type="button"
+                    class="btn bg-gradient-primary text-white">Edit</button></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SERVICE ORDER DETAILS</title>
+</head>
+<body>
+<h1><center>SERVICE ORDER DETAILS</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>SERVICE ORDER DETAILS ID</th>
+            <th>SERVICE ORDER ID</th>
+            <th>SERVICE ID</th>
+            <th>DESCRIPTION</th>
+            <th>ESTIMATED DIMENSION</th>
+            <th>SERVICE CHARGE</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in ServiceOrderDetails %}
+        <tr>
+            <td>{{ i.service_od_id}}</td>
+            <td>{{i.service_o_id}}</td>
+            <td>{{i.service_id}}</td>
+            <td>{{i.description}}</td>
+            <td>{{i.estimated_dimension}}</td>
+            <td>{{i.service_charge}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Category</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/pcategoryadd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Product Category Id</th>
+                            <th>Product Category Name</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in PCategory %}
+                        <tr style="color:black ;">
+                            <td>{{ i.p_category_id}}</td>
+                            <td>{{i.p_category_name}}</td>
+                            <td><a href="/pcategorydelete/{{ i.p_category_id}}/"><button type="button"
+                                        class="btn  bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/pcategoryedit/{{ i.p_category_id}}/"><button type="button"
+                                        class="btn  bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT CATEGORY</title>
+</head>
+<body>
+<h1><center>PRODUCT CATEGORY</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>PRODUCT CATEGORY ID</th>
+            <th>PRODUCT CATEGORY NAME</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in PCategory %}
+        <tr>
+            <td>{{ i.p_category_id}}</td>
+            <td>{{i.p_category_name}}</td>
+            <td><a href="/pcategorydelete/{{ i.p_category_id}}/">Delete</a>||
+                <a href="/pcategoryedit/{{ i.p_category_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

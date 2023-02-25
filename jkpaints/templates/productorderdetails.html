@@ -1,0 +1,95 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Order Details</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+          <a href="/productorderdetailsadd/">
+            <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+          </a>
+          <thead>
+            <tr style="color:black ;">
+              <th>Project Order Details Id</th>
+              <th>Product Order Id</th>
+              <th>PRODUCT Details Id</th>
+              <th>Quantity</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th>Option</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in ProductOrderDetails %}
+            <tr style="color:black ;">
+              <td>{{i.product_od_id}}</td>
+              <td>{{i.product_o_id}}</td>
+              <td>{{i.product_d_id}}</td>
+              <td>{{i.qty}}</td>
+              <td>{{i.description}}</td>
+              <td>{{i.price}}</td>
+              <td><a href="/productorderdetailsdelete/{{ i.product_od_id}}/"><button type="button"
+                    class="btn  bg-gradient-primary text-white">Delete</button></a>
+                <a href="/productorderdetailsedit/{{ i.product_od_id}}/"><button type="button"
+                    class="btn  bg-gradient-primary text-white">Edit</button></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT ORDER DETAILS</title>
+</head>
+<body>
+<h1><center>PRODUCT ORDER DETAILS</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+  <thead>
+  <tr>
+    <th>PRODUCT ORDER DETAILS ID</th>
+    <th>PRODUCT ORDER ID</th>
+    <th>PRODUCT DETAILS ID</th>
+    <th>QUANTITY</th>
+    <th>DESCRIPTION</th>
+    <Th>PRICE</Th>
+  </tr>
+  </thead>
+
+    <tbody>
+    {% for i in ProductOrderDetails %}
+    <tr>
+      <td>{{i.product_od_id}}</td>
+      <td>{{i.product_o_id}}</td>
+      <td>{{i.product_d_id}}</td>
+      <td>{{i.qty}}</td>
+      <td>{{i.description}}</td>
+      <td>{{i.price}}</td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+
+
+
+</table>
+</center>
+</body>
+</html>

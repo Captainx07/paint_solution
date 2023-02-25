@@ -1,0 +1,87 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Details </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/productdetailsadd/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="exampleFormControlSelect3">Product</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect3" name="product_id">
+              {% for i in product %}
+              <option value="{{i.product_id}}">{{i.product_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect4">shade</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect4" name="shade_id">
+              {% for i in shade %}
+              <option value="{{i.shade_id}}">{{i.shade_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect5">Size</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect5" name="size_id">
+              {% for i in size %}
+              <option value="{{i.size_id}}">{{i.size}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="pname">Price</label>
+            <input type="text" class="form-control" id="pname" placeholder="Enter Price" name="txtprice" required>
+          </div><br>
+          <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
+          <button class="btn btn-light">Cancel</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT DETAILS ADD</title>
+</head>
+<body>
+<h1><center>PRODUCT DETAILS ADD</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/productdetailsadd/">
+    {% csrf_token %}
+   
+    Product Name:<select name="product_id">
+     {% for i in product %}
+     <option value="{{i.product_id}}">{{i.product_name}}</option>
+     {% endfor %}
+     </select><br>
+    Shade:<select name="shade_id"><br>
+     {% for i in shade %}
+     <option value="{{i.shade_id}}">{{i.shade}}</option>
+     {% endfor %}
+     </select><br>
+    Size:<select name="size_id"><br>
+     {% for i in size %}
+     <option value="{{i.size_id}}">{{i.size}}</option>
+     {% endfor %}
+     </select><br>
+    Price:<input type="text" name="txtprice" required ><br>
+    
+    <br><input type="submit" value="Add">
+</form>
+</body>
+</html> 

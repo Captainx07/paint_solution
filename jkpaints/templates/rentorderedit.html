@@ -1,0 +1,41 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Invoice Rent </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <form class="table-responsive" method="post" action="/rentorderupdate/{{rentorder.rent_o_id}}/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="Customer">Customer Name</label>
+                        <select class="form-control form-control-lg" id="Customer" name="customer_id">
+                            {% for i in customer %}
+                            <option value="{{i.customer_id}}">{{i.customer_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Date">Order Day</label>
+                        <input type="date" class="form-control" id="Date" placeholder="Enter Order Date" name="txtdate"
+                            value="{{rentorder.order_date}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Total">Total Amount</label>
+                        <input type="number" class="form-control" id="Total" placeholder="Enter Total Amount"
+                            name="txttotal" value="{{rentorder.total}}" required>
+                    </div>
+                    <button type="submit" class="btn  bg-gradient-primary text-white">Update</button>
+                    <button class="btn btn-light">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

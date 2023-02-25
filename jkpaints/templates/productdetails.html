@@ -1,0 +1,90 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Details</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/productdetailsadd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Product Details Id</th>
+                            <th>Product Id</th>
+                            <th>Shade Id</th>
+                            <th>Size Id</th>
+                            <th>Price</th>
+                            <th>Option</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in ProductDetails %}
+                        <tr style="color:black ;">
+                            <td>{{i.product_d_id}}</td>
+                            <td>{{i.product}}</td>
+                            <td>{{i.shade}}</td>
+                            <td>{{i.size_id}}{{i.unit.unit_name}}</td>
+                            <td>{{i.price}}</td>
+                            <td><a href="/productdetailsdelete/{{ i.product_d_id}}/"><button type="button"
+                                        class="btn  bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/productdetailsedit/{{i.product_d_id}}/"><button type="button"
+                                        class="btn  bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT DETAILS</title>
+</head>
+<body>
+<h1><center>PRODUCT DETAILS</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>PRODUCT DETAILS ID</th>
+            <th>PRODUCT ID</th>
+            <th>SHADE ID</th>
+            <th>SIZE ID</th>
+            <th>PRICE</th>
+            <th>OPTION</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in ProductDetails %}
+        <tr>
+            <td>{{i.product_d_id}}</td>
+            <td>{{i.product_id}}</td>
+            <td>{{i.shade_id}}</td>
+            <td>{{i.size_id}}</td>
+            <td>{{i.price}}</td>
+            <td><a href="/productdetailsdelete/{{ i.product_d_id}}/">Delete</a>||<a href="/productdetailsedit/{{i.product_d_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

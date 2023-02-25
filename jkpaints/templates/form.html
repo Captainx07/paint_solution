@@ -1,0 +1,73 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+      <div class="card-header py-3">
+          <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Form</h6>
+      </div>
+      <div class="card-body">
+          <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                <a href="/formadd/">
+                  <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                  </a>
+                  <thead>
+                    <tr style="color:black ;">
+                            <th>Form Id</th>
+                            <th>Form Name</th>
+                            <th>Option</th>
+                    </tr>   
+                        </thead>
+                        <tbody>
+                        {% for i in Form %}
+                        <tr style="color:black ;">
+                            <td>{{ i.form_id}}</td>
+                            <td>{{i.form_name}}</td>
+                            <td><a href="/formdelete/{{ i.form_id}}/"><button type="button" class="btn bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/formedit/{{ i.form_id}}/"><button type="button" class="btn bg-gradient-primary text-white">Edit</button></a></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                      
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+{% endblock %}
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FORM</title>
+</head>
+<body>
+<h1><center>FORM</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>FORM ID</th>
+            <th>FORM NAME</th>
+            <th>OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in Form %}
+        <tr>
+            <td>{{ i.form_id}}</td>
+            <td>{{i.form_name}}</td>
+             <td><a href="/formdelete/{{ i.form_id}}/">Delete</a>||<a href="/formedit/{{ i.form_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

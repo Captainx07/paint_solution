@@ -1,0 +1,99 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Details </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/productdetailsupdate/{{productdetails.product_d_id}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="exampleFormControlSelect3">Product</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect3" name="product_id">
+              {% for i in product %}
+              {% if i.product_id == productdetails.product_id %}
+              <option value="{{i.product_id}}" selected>{{i.product_name}}</option>
+              {%else%}
+              <option value="{{i.product_id}}">{{i.product_name}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect4">shade</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect4" name="shade_id">
+              {% for i in shade %}
+              {% if i.shade_id == productdetails.shade_id %}
+              <option value="{{i.shade_id}}" selected>{{i.shade_name}}</option>
+              {%else%}
+              <option value="{{i.shade_id}}">{{i.shade_name}}</option>
+              {%endif%}
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect5">Size</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect5" name="size_id">
+              {% for i in size %}
+              {% if i.size_id == productdetails.size_id %}
+              <option value="{{i.size_id}}" selected>{{i.size}}</option>
+              {%else%}
+              <option value="{{i.size_id}}">{{i.size}}</option>
+              {%endif%}
+
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="pname">Price</label>
+            <input type="text" class="form-control" id="pname" placeholder="Enter Price" name="txtprice" required
+              value="{{productdetails.price}}"><br>
+            <button type="submit" class="btn bg-gradient-primary text-white">Update</button>
+            <button class="btn btn-light">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT DETAILS EDIT</title>
+</head>
+<body>
+<h1><center>PRODUCT DETAILS EDIT</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/productdetailsupdate/{{productdetails.product_d_id}}/">
+     {% csrf_token %}
+    
+    Product Name:<select name="product_id">
+    {% for i in product %}
+    <option value="{{i.product_id}}">{{i.product_name}}</option>
+    {% endfor %}
+    </select><br>
+    Shade name:<select name="shade_id"><br>
+        {% for i in shade %}
+        <option value="{{i.shade_id}}">{{i.shade_name}}</option>
+        {% endfor %}
+        </select><br>
+         Size:<select name="size_id">
+        {% for i in size %}
+        <option value="{{i.size_id}}">{{i.size}}</option>
+        {% endfor %}
+        </select><br>
+    Price:<input type="number" name="txtprice" value="{{productdetails.price}}"><br>
+    <br><input type="submit" value="Update">
+</form>
+</body>
+</html>

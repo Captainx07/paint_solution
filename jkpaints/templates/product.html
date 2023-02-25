@@ -1,0 +1,126 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/productadd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Product Id</th>
+                            <th>Product Name</th>
+                            <th>Description</th>
+                            <th>Brand</th>
+                            <th>Product Category</th>
+                            <th>Type</th>
+                            <th>Form</th>
+                            <th>Finish</th>
+                            <th>Material</th>
+                            <th>Covering Capacity</th>
+                            <th>Image</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in Product %}
+                        <tr style="color:black ;">
+                            <td>{{ i.product_id}}</td>
+                            <td>{{ i.product_name}}</td>
+                            <td>{{ i.description}}</td>
+                            <td>{{ i.brand}}</td>
+                            <td>{{ i.p_category}}</td>
+                            <td>{{ i.type}}</td>
+                            <td>{{ i.form}}</td>
+                            <td>{{ i.finish}}</td>
+                            <td>{{ i.material}}</td>
+                            <td>{{ i.covering_capacity}}</td>
+                            {% if i.image %}
+                                    <td><img src="{{i.image}}" height="140" width="140"></td>
+                                {% else %}
+                                    <td>No Image Found</td>
+                                {% endif %}
+                            <td><a href="/productdelete/{{ i.product_id}}/"><button type="button"
+                                        class="btn  bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/productedit/{{ i.product_id}}/"><button type="button"
+                                        class="btn  bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+        </div>
+</div>
+</footer>
+<!-- End of Footer -->
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT</title>
+</head>
+<body>
+<h1><center>PRODUCT</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>PRODUCT ID</th>
+            <th>PRODUCT NAME</th>
+            <th>DESCRIPTION</th>
+            <th>BRAND</th>
+            <th>PRODUCT CATEGORY</th>
+            <th>TYPE</th>
+            <th>FORM</th>
+            <th>FINISH</th>
+            <th>MATERIAL</th>
+            <th>COVERING CAPACITY</th>
+            <th>IMAGE</th>
+            <th>OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in Product %}
+        <tr>
+            <td>{{ i.product_id}}</td>
+            <td>{{ i.product_name}}</td>
+            <td>{{ i.description}}</td>
+            <td>{{ i.brand_id}}</td>
+            <td>{{ i.p_category_id}}</td>
+            <td>{{ i.type_id}}</td>
+            <td>{{ i.form_id}}</td>
+            <td>{{ i.finish_id}}</td>
+            <td>{{ i.material}}</td>
+            <td>{{ i.covering_capacity}}</td>
+            <td>{{ i.image}}</td>
+            <td><a href="/productdelete/{{ i.product_id}}/">Delete</a>||<a href="/productedit/{{ i.product_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

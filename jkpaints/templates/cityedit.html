@@ -1,0 +1,61 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">City </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/cityupdate/{{city.city_id}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="City_name">City Name</label>
+            <input type="text" class="form-control" id="City_name" placeholder="Enter City Name" name="txtcname"
+              value="{{city.city_name}}" required>
+          </div>
+          <div class="form-group">
+            <label for="state_name">State Name</label>
+            <select class="form-control " id="state_name" name="state_id">
+              {% for i in state %}
+              {% if i.state_id == city.state_id %}
+              <option value="{{i.state_id}}" selected>{{i.state_name}}</option>
+              {%else%}
+              <option value="{{i.state_id}}">{{i.state_name}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Update</button>
+          <button class="btn btn-light">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CITY EDIT</title>
+</head>
+<body>
+<h1><center>CITY EDIT</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/cityupdate/{{city.city_id}}/">
+     {% csrf_token %}
+    City name:<input type="text" name="txtcname" value="{{city.city_name}}" required><br>
+    <select name="state_id">
+    {% for i in state %}
+    <option value="{{i.state_id}}">{{i.state_name}}</option><br>
+    {% endfor %}
+    </select>
+    <br><input type="submit" value="Update">
+</form>
+</body>
+</html>

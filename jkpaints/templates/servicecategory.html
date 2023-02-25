@@ -1,0 +1,80 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Service Category</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+          <a href="/servicecategoryadd/">
+            <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+          </a>
+          <thead>
+            <tr style="color:black ;">
+              <th>Service Category Id</th>
+              <th>Service Category Name</th>
+              <th>Descripition</th>
+              <th>Option</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in ServiceCategory %}
+            <tr>
+              <td>{{i.s_category_id}}</td>
+              <td>{{i.service_name}}</td>
+              <td>{{i.description}}</td>
+              <td><a href="/servicecategorydelete/{{ i.s_category_id}}/"><button type="button"
+                    class="btn bg-gradient-primary text-white">Delete</button></a>
+                <a href="/servicecategoryedit/{{ i.s_category_id}}/"><button type="button"
+                    class="btn bg-gradient-primary text-white">Edit</button></a>
+              </td>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SERVICE CATEGORY</title>
+</head>
+<body>
+<h1><center>SERVICE CATEGORY</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>SERVICE CATEGORY ID</th>
+            <th>SERVICE CATEGORY NAME</th>
+            <th>DESCRIPTION</th>
+            <th>OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in ServiceCategory %}
+        <tr>
+            <td>{{i.s_category_id}}</td>
+            <td>{{i.service_name}}</td>
+            <td>{{i.description}}</td>
+            <td><a href="/servicecategorydelete/{{ i.s_category_id}}/">Delete</a>||<a href="/servicecategoryedit/{{ i.s_category_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+
+</body>
+</html>

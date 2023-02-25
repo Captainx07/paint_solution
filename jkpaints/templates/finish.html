@@ -1,0 +1,72 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+      <div class="card-header py-3">
+          <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Finish</h6>
+      </div>
+      <div class="card-body">
+          <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                <a href="/finishadd/">
+                  <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                  </a><br>
+                  <thead>
+                    <tr style="color:black ;">
+                                <th>Finish Id</th>
+                                <th>Finish Name</th>
+                                <th>Option</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in Finish %}
+                        <tr style="color:black ;">
+                                <td>{{ i.finish_id}}</td>
+                                <td>{{i.finish_name}}</td>
+                                 <td><a href="/finishdelete/{{ i.finish_id}}/"><button type="button" class="btn bg-gradient-primary text-white">Delete</button></a>
+                                    <a href="/finishedit/{{ i.finish_id}}/"><button type="button" class="btn bg-gradient-primary text-white">Edit</button></a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+              </div>
+            </div>
+         
+{% endblock %}
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FINISH</title>
+</head>
+<body>
+<h1><center>FINISH</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>FINISH ID</th>
+            <th>FINISH NAME</th>
+            <th>OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in Finish %}
+        <tr>
+            <td>{{ i.finish_id}}</td>
+            <td>{{i.finish_name}}</td>
+            <td><a href="/finishdelete/{{ i.finish_id}}/">Delete</a>||<a href="/finishedit/{{ i.finish_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

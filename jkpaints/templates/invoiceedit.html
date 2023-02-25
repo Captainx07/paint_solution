@@ -1,0 +1,99 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Invoice </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/invoiceupdate/{{invoice.invoice_id}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="Customer">Customer Name</label>
+            <select class="form-control form-control-lg" id="Customer" name="customer_id">
+              {% for i in customer %}
+              {% if i.customer_id == invoicerent.customer_id %}
+              <option value="{{i.customer_id}}" selected>{{i.customer_name}}</option>
+              {%else%}
+              <option value="{{i.customer_id}}">{{i.customer_name}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Date">Invoice Date</label>
+            <input type="date" class="form-control" id="Date" placeholder="Enter Invoice Date"
+              value="{{invoice.invoice_date|date:'Y-m-d'}}" name="txtdate" required>
+          </div>
+          <div class="form-group">
+            <label for="Details">Rent Order Details Id</label>
+            <select class="form-control form-control-lg" id="Details" name="rent_od_id">
+              <option value="0">--Select--</option>
+              {% for i in rentod %}
+              {% if i.rent_od_id == invoice.rent_od_id %}
+              <option value="{{i.rent_od_id}}" selected>{{i.rent_od_id}}</option>
+              {%else%}
+              <option value="{{i.rent_od_id}}">{{i.rent_od_id}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="Details1">Service Order Details Id</label>
+            <select class="form-control form-control-lg" id="Details1" name="service_od_id">
+              <option value="0">--Select--</option>
+              {% for i in serviceod %}
+              {% if i.service_od_id == invoice.service_od_id %}
+              <option value="{{i.service_od_id}}" selected>{{i.service_od_id}}</option>
+              {%else%}
+              <option value="{{i.service_od_id}}">{{i.service_od_id}}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn  bg-gradient-primary text-white">Add</button>
+          <button class="btn btn-light">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>invoice Edit</title>
+</head>
+<body>
+<form method="POST" action="/invoiceupdate/{{invoice.invoice_id}}/">
+    {% csrf_token %}
+     {% csrf_token %}
+     Customer name:<select name="customer_id">
+    {% for i in customer %}
+    <option value="{{i.customer_id}}">{{i.customer_name}}</option>
+    {% endfor %}
+    </select>
+    Date:<input type="date" name="txtdate" value="{{invoice.invoice_date}}" required><br>
+    rent order details:<select name="rent_od_id">
+    <option value="0">--Select--</option>
+    {% for i in rentod %}
+    <option value="{{i.rent_od_id}}">{{i.rent_od_id}}</option>
+    {% endfor %}
+    </select>
+    service order details:<select name="service_od_id">
+    <option value="0">--Select--</option>
+    {% for i in serviceod %}
+    <option value="{{i.service_od_id}}">{{i.service_od_id}}</option>
+    {% endfor %}
+    </select>
+    <br><input type="submit" value="Update">
+</form>
+
+</body>
+</html>

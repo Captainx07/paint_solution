@@ -1,0 +1,54 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Scheduling</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <form class="table-responsive" method="post" action="/schedulingupdate/{{scheduling.scheduling_id}}/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="Scheduling">Scheduling Date</label>
+                        <input type="date" class="form-control" id="Scheduling" placeholder="Enter Scheduling Date"
+                            name="txtsd" value="{{scheduling.scheduling_date }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="JobWorker">Job Worker Id</label>
+                        <select class="form-control" id="JobWorker" name="job_worker_id">
+                            {% for i in jobworker %}
+                            <option value="{{i.job_worker_id}}">{{i.worker_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ServiceOrder">Service Order Id</label>
+                        <select class="form-control" id="ServiceOrder" name="service_o_id">
+                            {% for i in serviceorder %}
+                            <option value="{{i.service_o_id}}">{{i.service_o_id}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Instructions">Instructions </label>
+                        <input type="text" class="form-control" id="Instructions" placeholder="Enter Instructions"
+                            name="txtins" value="{{scheduling.instruction}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Status">Status </label>
+                        <input type="text" class="form-control" id="Status" placeholder="Enter  Status" name="txtstatus"
+                            value="{{scheduling.status }}" required>
+                    </div>
+
+                    <button type="submit" class="btn  bg-gradient-primary text-white">Update</button>
+                    <button class="btn btn-light">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

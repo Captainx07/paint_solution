@@ -1,0 +1,80 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Size</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/sizeadd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Size Id</th>
+                            <th>Size</th>
+                            <th>Unit Id</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in Size %}
+                        <tr style="color:black ;">
+                            <td>{{ i.size_id}}</td>
+                            <td>{{i.size}}</td>
+                            <td>{{i.unit.unit_name}}</td>
+                            <td><a href="/sizedelete/{{ i.size_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/sizeedit/{{ i.size_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SIZE</title>
+</head>
+<body>
+<h1><center>SIZE</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>SIZE ID</th>
+            <th>SIZE</th>
+            <th>UNIT ID</th>
+            <th>OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in Size %}
+        <tr>
+            <td>{{ i.size_id}}</td>
+            <td>{{i.size}}</td>
+            <td>{{i.unit_id}}</td>
+            <td><a href="/sizedelete/{{ i.size_id}}/">Delete</a>||<a href="/sizeedit/{{ i.size_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

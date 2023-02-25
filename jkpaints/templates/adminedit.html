@@ -1,0 +1,53 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Admin </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/adminupdate/{{admin.admin_id}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="exampleInputUsername1">Admin Name</label>
+            <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Enter Admin Name"
+              name="txtaname" value="{{admin.admin_name}}" required><br>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
+              name="txtpassw" value="{{admin.password}}" required>
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Update</button>
+          <button class="btn btn-light">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ADMIN EDIT</title>
+</head>
+<body>
+<h1><center>ADMIN EDIT</center></h1>
+<a href="/home/">BACK</a><br>
+    <form method="POST" action="/adminupdate/{{admin.admin_id}}/">
+        {% csrf_token %}
+        Admin name:<input type="text" name="txtaname" value="{{admin.admin_name}}" required><br>
+        Password:<input type="password" name="txtpassw" value="{{admin.password}}"required><br>
+        <input type="submit" value="Update">
+    </form>
+
+</body>
+</html>

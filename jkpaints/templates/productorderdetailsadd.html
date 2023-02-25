@@ -1,0 +1,56 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Order Details </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <form class="table-responsive" method="post" action="/productorderdetailsadd/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="pOrderId">Product Order Id</label>
+                        <select class="form-control " id="pOrderId" name="product_o_id">
+                            {% for i in product %}
+                            <option value="{{i.product_o_id}}">{{i.product_o_id}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pdId">Product Details Id</label>
+                        <select class="form-control " id="pdId" name="product_d_id">
+                            {% for i in productdetails %}
+                            <option value="{{i.product_d_id}}">{{i.product_d_id}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Description">Description</label>
+                        <input type="text" class="form-control" id="Description" placeholder="Enter Description"
+                            name="txtdis" required>
+                    </div>
+
+            </div>
+            <div class="form-group">
+                <label for="Quentity">Quentity</label>
+                <input type="number" class="form-control" id="Quentity" placeholder="Enter Quentity" name="txtqty"
+                    required>
+            </div>
+            <div class="form-group">
+                <label for="Price">Price</label>
+                <input type="number" class="form-control" id="Price" placeholder="Enter Price" name="txtprice" required>
+            </div><br>
+            <button type="submit" class="btn  bg-gradient-primary text-white">Add</button>
+            <button class="btn btn-light">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock %}

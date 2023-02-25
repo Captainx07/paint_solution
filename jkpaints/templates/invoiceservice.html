@@ -1,0 +1,88 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Invoice Service</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/invoiceserviceadd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Invoice Service Id</th>
+                            <th>Invoice Id</th>
+                            <th>Service</th>
+                            <th>Dimension</th>
+                            <th>Service Charges</th>
+                            <th>Option</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in InvoiceService %}
+                        <tr style="color:black ;">
+                            <td>{{ i.invoice_s_id}}</td>
+                            <td>{{ i.invoice_id}}</td>
+                            <td>{{ i.service}}</td>
+                            <td>{{ i.dimension}}</td>
+                            <td>{{i.service_charge}}</td>
+                            <td><a href="/invoiceservicedelete/{{i.invoice_s_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/invoiceserviceedit/{{i.invoice_s_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>INVOICE SERVICE</title>
+</head>
+<body>
+<h1><center>INVOICE SERVICE</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+
+            <th>INVOICE SERVICE ID</th>
+            <th>INVOICE ID</th>
+            <th>SERVICE ID</th>
+            <th>DIMENSION</th>
+            <th>SERVICES CHARGES</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in InvoiceService %}
+        <tr>
+            <td>{{ i.invoice_s_id}}</td>
+            <td>{{ i.invoice_id}}</td>
+            <td>{{ i.service_id}}</td>
+            <td>{{ i.dimension}}</td>
+            <td>{{i.service_charge}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

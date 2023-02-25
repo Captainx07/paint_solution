@@ -1,0 +1,92 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Supplier</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/supplieradd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Supplier Id</th>
+                            <th>Company Name</th>
+                            <th>Suppleier Name</th>
+                            <th>Address</th>
+                            <th>Contct Number</th>
+                            <th>Email Id</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in Supplier %}
+                        <tr style="color:black ;">
+                            <td>{{i.supplier_id}}</td>
+                            <td>{{i.company_name}}</td>
+                            <td>{{i.supplier_name}}</td>
+                            <td>{{i.address}}</td>
+                            <td>{{i.contact_no}}</td>
+                            <td>{{i.email_id}}</td>
+                            <td><a href="/supplierdelete/{{i.supplier_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/supplieredit/{{i.supplier_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SUPPLIER</title>
+</head>
+<body>
+<h1><center>SUPPLIER</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>SUPPLIER ID</th>
+            <th>COMPANY NAME</th>
+            <th>SUPPLIER NAME</th>
+            <th>ADDRESS</th>
+            <th>CONTACT NUMBER</th>
+            <th>EMAIL ID</th>
+            <th>OPTION</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in Supplier %}
+        <tr>
+            <td>{{i.supplier_id}}</td>
+            <td>{{i.company_name}}</td>
+            <td>{{i.supplier_name}}</td>
+            <td>{{i.address}}</td>
+            <td>{{i.contact_no}}</td>
+            <td>{{i.email_id}}</td>
+            <td><a href="/supplierdelete/{{ i.supplier_id}}/">Delete</a>||<a href="/supplieredit/{{ i.supplier_id}}/">Edit</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

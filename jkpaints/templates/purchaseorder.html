@@ -1,0 +1,87 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Purchase Order</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/purchaseorderadd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Purchase Order Id</th>
+                            <th>Supplier</th>
+                            <th>Order Date</th>
+                            <th>Total Amount</th>
+                            <th>Shipping/Handling</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in PurchaseOrder %}
+                        <tr style="color:black ;">
+                            <td>{{ i.purchase_o_id}}</td>
+                            <td>{{i.supplier_id}}</td>
+                            <td>{{i.order_date}}</td>
+                            <td>{{i.total}}</td>
+                            <td>{{i.shipping_handling}}</td>
+                            <td><a href="/purchaseorderdelete/{{ i.purchase_o_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/purchaseorderedit/{{ i.purchase_o_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PURCHASE ORDER</title>
+</head>
+<body>
+<h1><center>PURCHASE ORDER</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>PURCHASE ORDER ID</th>
+            <th>SUPPLIER</th>
+            <th>ORDER DATE</th>
+            <th>TOTAL AMOUNT</th>
+            <th>SHIPPING/HANDLING</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in PurchaseOrder %}
+        <tr>
+            <td>{{ i.purchase_o_id}}</td>
+            <td>{{i.supplier_id}}</td>
+            <td>{{i.order_date}}</td>
+            <td>{{i.total}}</td>
+            <td>{{i.shipping_handling}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

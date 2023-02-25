@@ -1,0 +1,51 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Invoice Rent </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/invoicerentupdate/{{invoicerent.invoice_r_id}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="invoice">invoice Id</label>
+            <select class="form-control form-control-lg" id="invoice" name="invoice_id">
+              {% for i in invoice %}
+              <option value="{{i.invoice_id}}">{{i.invoice_id}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <label for="Machinery">Machinery Name</label>
+          <select class="form-control form-control-lg" id="Machinery" name="m_id">
+            {% for i in machinery %}
+            {% if i.m_id == invoicerent.m_id %}
+              <option value="{{i.m_id}}" selected>{{i.m_name}}</option>
+              {%else%}
+              <option value="{{i.m_id}}">{{i.m_name}}</option>
+               {% endif %}
+            {% endfor %}
+          </select>
+      </div>
+      <div class="form-group">
+        <label for="Date">Total Day</label>
+        <input type="number" class="form-control" id="Date" placeholder="Enter Total Day" name="txtday"
+          value="{{invoicerent.days}}" required>
+      </div>
+      <div class="form-group">
+        <label for="Charge">Rent Charge</label>
+        <input type="number" class="form-control" id="Charge" placeholder="Enter Rent Charge" name="txtchare"
+          value="{{invoicerent.rent_charge}}" required>
+      </div>
+      <button type="submit" class="btn  bg-gradient-primary text-white">Update</button>
+      <button class="btn btn-light">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endblock %}

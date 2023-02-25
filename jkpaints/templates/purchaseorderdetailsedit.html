@@ -1,0 +1,65 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary"> Purchase Order Details</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <form class="table-responsive" method="post"
+                    action="/purchaseorderdetailsupdate/{{purchaseorderdetails.purchase_od_id}}/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="PurchaseOrderId">Purchase Order Id</label>
+                        <select class="form-control " id="PurchaseOrderId" name="purchase_o_id">
+                            {% for i in puo %}
+                            {% if i.purchase_o_id == purchaseorderdetails.purchase_o_id %}
+                            <option value="{{i.purchase_o_id}}" selected>{{i.purchase_o_id}}</option>
+                            {%else%}
+                            <option value="{{i.purchase_o_id}}">{{i.purchase_o_id}}</option>
+                            {%endif%}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ProductOrderId">Product Order Id</label>
+                        <select class="form-control " id="ProductOrderId" name="product_d_id">
+                            {% for i in productdetails %}
+                            {% if i.product_d_id == purchaseorderdetails.product_d_id %}
+                            <option value="{{i.product_d_id}}" selected>{{i.product_d_id}}</option>
+                            {%else%}
+                            <option value="{{i.product_d_id}}">{{i.product_d_id}}</option>
+                            {%endif%}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Description">Description</label>
+                        <input type="text" class="form-control" id="Description" placeholder="Enter Description"
+                            name="txtdis" value="{{purchaseorderdetails.description}}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Quantity">Quantity </label>
+                        <input type="number" class="form-control" id="Quantity" placeholder="Enter Quantity "
+                            name="txtqty" value="{{purchaseorderdetails.qty}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Price">Price </label>
+                        <input type="number" class="form-control" id="Price" placeholder="Enter Price" name="txtprice"
+                            value="{{purchaseorderdetails.price}}" required>
+                    </div>
+
+                    <button type="submit" class="btn  bg-gradient-primary text-white">Update</button>
+                    <button class="btn btn-light">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

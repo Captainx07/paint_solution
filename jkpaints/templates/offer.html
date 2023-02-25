@@ -1,0 +1,106 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Offer</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/offeradd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Offer Id</th>
+                            <th>Offer Code</th>
+                            <th>Min Amount</th>
+                            <th>Discoint</th>
+                            <th>Max Amount</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Isactive</th>
+                            <th>No Of Times</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in Offer %}
+                        <tr style="color:black ;">
+                            <td>{{i.offer_id}}</td>
+                            <td>{{i.offer_code}}</td>
+                            <td>{{i.min_amount}}</td>
+                            <td>{{i.discount}}</td>
+                            <td>{{i.max_discount}}</td>
+                            <td>{{i.start_date}}</td>
+                            <td>{{i.end_date}}</td>
+                            <td>{{i.is_active }}</td>
+                            <td>{{i.no_of_time}}</td>
+                            <td><a href="/offerdelete/{{i.offer_id}}/"><button type="button"
+                                        class="btn  bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/offeredit/{{i.offer_id}}/"><button type="button"
+                                        class="btn  bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OFFER</title>
+</head>
+<body>
+<h1><center>OFFER</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+        <thead>
+            <tr>
+                <th>OFFER ID</th>
+                <th>OFFER CODE</th>
+                <th>MIN AMOUNT</th>
+                <th>DISCOUNT</th>
+                <th>MAX AMOUNT</th>
+                <th>START DATE</th>
+                <th>END DATE</th>
+                <th>ISACTIVE</th>
+                <th>NO OF TIMES</th>
+                <th>OPTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in Offer %}
+            <tr>
+                <td>{{i.offer_id}}</td>
+                <td>{{i.offer_code}}</td>
+                <td>{{i.min_amount}}</td>
+                <td>{{i.discount}}</td>
+                <td>{{i.max_discount}}</td>
+                <td>{{i.start_date}}</td>
+                <td>{{i.end_date}}</td>
+                <td>{{i.is_active }}</td>
+                <td>{{i.no_of_time}}</td>
+                <td><a href="/offerdelete/{{i.offer_id}}/">Delete</a>||<a href="/offeredit/{{i.offer_id}}/">Edit</a></td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+
+</table>
+</center>
+</body>
+</html>

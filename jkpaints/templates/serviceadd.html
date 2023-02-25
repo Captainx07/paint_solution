@@ -1,0 +1,73 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Service </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/serviceadd/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="sname">Service Name</label>
+            <input type="text" class="form-control" id="sname" placeholder="Enter Service " name="" txtsname"" required>
+          </div>
+          <div class="form-group">
+            <label for="dname">Description</Service>
+              <input type="text" class="form-control" id="dname" placeholder="Enter Description" name="" txtdescri""
+                required>
+          </div>
+          <div class="form-group">
+            <label for="sname">Service Charge Name</label>
+            <input type="number" class="form-control" id="pname" placeholder="Enter Service Charge " name=""
+              txtscharge"" required>
+          </div>
+          <div class="form-group">
+            <label for="product">Servise Category Name</label>
+            <select class="form-control form-control-lg" id="product" name="s_sub_id">
+              {% for i in sscategory %}
+              <option value="{{i.s_sub_id}}">{{i.s_sub_name}}"</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
+          <button class="btn btn-light">Cancel</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SERVICE ADD</title>
+</head>
+<body>
+<h1><center>SERVICE ADD</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/serviceadd/">
+    {% csrf_token %}
+    Service name:<input type="text" name="txtsname" required><br>
+    Description:<input type="text" name="txtdescri"required><br>
+    service_charge:<input type="number" name="txtscharge"required><br>
+    Service sub category:<select name="s_sub_id">
+    {% for i in sscategory %}
+    <option value="{{i.s_sub_id}}">{{i.s_sub_name}}"</option><br>
+    {% endfor %}
+    </select>
+    <br><input type="submit" value="Add">
+</form>
+</body>
+</html>

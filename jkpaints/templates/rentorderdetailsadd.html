@@ -1,0 +1,60 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary"> Rent Order Details </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <form class="table-responsive" method="post" action="/rentorderdetailsadd/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="RentOrderId">Rent Order Id</label>
+                        <select class="form-control " id="RentOrderId" name="rent_o_id">
+                            {% for i in rentorder %}
+                            <option value="{{i.rent_o_id}}">{{i.rent_o_id}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Machinery">Machinery Name</label>
+                        <select class="form-control " id="Machinery" name="m_id">
+                            {% for i in machinery %}
+                            <option value="{{i.m_id}}">{{i.m_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Description">Description</label>
+                        <input type="text" class="form-control" id="Description" placeholder="Enter Description"
+                            name="txtdis" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Days">Requirement Days</label>
+                        <input type="number" class="form-control" id="Days" placeholder="Enter Require Days"
+                            name="txtreqday" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Date">Return Date</label>
+                        <input type="date" class="form-control" id="Date" placeholder="Enter Return Date"
+                            name="txtretdate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Charge">Rent Machinery Charges</label>
+                        <input type="number" class="form-control" id="Charge" placeholder="Enter Rent Charge"
+                            name="txtprice" required>
+                    </div>
+                    <button type="submit" class="btn  bg-gradient-primary text-white">Add</button>
+                    <button class="btn btn-light">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

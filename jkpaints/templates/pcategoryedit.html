@@ -1,0 +1,45 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Category </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/pcategoryupdate/{{pcategory.p_category_id}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="pname">Form Name</label>
+            <input type="text" class="form-control" id="pname" placeholder="Enter Product category Name"
+              name="txtpcname" value="{{pcategory.p_category_name}}" required><br>
+            <button type="submit" class="btn bg-gradient-primary text-white">Update</button>
+            <button class="btn btn-light">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PRODUCT CATEGORY EDIT</title>
+</head>
+<body>
+<h1><center>PRODUCT CATEGORY EDIT</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/pcategoryupdate/{{pcategory.p_category_id}}/">
+    {% csrf_token %}
+    Product Category name:<input type="text" name="txtpcname" value="{{pcategory.p_category_name}}" required><br>
+            <input type="submit" value="Update">
+</form>
+</body>
+</html>

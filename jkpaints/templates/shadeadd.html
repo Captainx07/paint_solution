@@ -1,0 +1,48 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Shade </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/shadeadd/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="sname">Shade Name</label>
+            <input type="text" class="form-control" id="sname" placeholder="Enter Shade " name="txtsname" required>
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
+          <button class="btn btn-light">Cancel</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SHADE ADD</title>
+</head>
+<body>
+<h1><center>SHADE ADD</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/shadeadd/">
+    {% csrf_token %}
+    Shade name:<input type="text" name="txtsname" required><br>
+            <input type="submit" value="Add">
+</form>
+</body>
+</html>

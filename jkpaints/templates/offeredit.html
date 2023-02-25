@@ -1,0 +1,85 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Offer </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/offerupdate/{{offer.offer_id}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="mname">Offer Code</label>
+            <input type="text" class="form-control" id="mname" placeholder="Enter offer code" name="txtocode"
+              value="{{offer.offer_code}}" required>
+          </div>
+          <div class="form-group">
+            <label for="Description">Min amount</label>
+            <input type="number" class="form-control" id="Description" placeholder="Enter min amount" name="txtmin"
+              value="{{offer.min_amount}}">
+          </div>
+          <div class="form-group">
+            <label for="Rent_charge">Discount</label>
+            <input type="text" class="form-control" id="Rent_charge" placeholder="Enter discount" name="txtdis"
+              value="{{offer.discount}}" required>
+          </div>
+          <div class="form-group">
+            <label for="Machine_Work">Max Amount</label>
+            <input type="number" class="form-control" id="Machine_Work" placeholder="Enter max amount" name="txtmax"
+              value="{{offer.max_discount}}">
+          </div>
+          <div class="form-group">
+            <label for="sdate">Start Date</label>
+            <input type="date" class="form-control" id="sdate" placeholder="Enter Start date" name="txtstrtdate"
+              value="{{offer.start_date}}">
+          </div>
+          <div class="form-group">
+            <label for="edate">End Date</label>
+            <input type="date" class="form-control" id="edate" placeholder="Enter End date" name="txtenddate"
+              value="{{offer.end_date}}">
+          </div>
+          <div class="form-group">
+            <label for="idate">Isactive Date</label>
+            <input type="date" class="form-control" id="idate" placeholder="Enter isactive" name="txtisact"
+              value="{{offer.is_active}}">
+          </div>
+          <div class="form-group">
+            <label for="idate">No Of Times</label>
+            <input type="number" class="form-control" id="idate" placeholder="Enter no of times" name="txtisact"
+              value="{{offer.no_of_time}}">
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Update</button>
+          <button class="btn btn-light">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>OFFER EDIT</title>
+</head>
+<body>
+<h1><center>OFFER EDIT</center></h1>
+    <form method="POST" action="/offerupdate/{{offer.offer_id}}/">
+        {% csrf_token %}
+        OFFER CODE:<input type="text" name="txtcode" value="{{offer.offer_code}}"><br>
+        MIN AMOUNT:<input type="text" name="txtmin" value="{{offer.min_amount}}"><br>
+        DISCOUNT:<input type="text" name="txtdis" value="{{offer.discount}}"><br>
+        MAX AMOUNT:<input type="text" name="txtmax" value="{{offer.max_discount}}"><br>
+        START DATE:<input type="date" name="txtstrtdate" value="{{offer.start_date}}" required ><br>
+        END DATE:<input type="date" name="txtenddate" value="{{offer.end_datee}}" required><br>
+        ISACTIVE:<input type="date" name="txtisact" value="{{offer.is_active}}" required ><br>
+        NO OF TIMES:<input type="text" name="txtnof" value="{{offer.no_of_time}}"><br>
+        <input type="submit" value="Update">
+    </form>
+
+</body>
+</html>

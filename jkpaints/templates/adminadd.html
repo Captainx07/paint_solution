@@ -1,0 +1,53 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Admin </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/adminadd/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="exampleInputUsername1">Admin Name</label>
+            <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Enter Admin Name"
+              name="txtaname" required><br>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password" name="txtpassw" required>
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
+          <button class="btn btn-light">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ADMIN ADD</title>
+</head>
+<body>
+<h1><center>ADMIN ADD</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/adminadd/">
+    {% csrf_token %}
+    Admin name:<input type="text" name="txtaname" required><br>
+    Password:<input type="password" name="txtpassw" required><br>
+            <input type="submit" value="Add">
+</form>
+</body>
+</html>

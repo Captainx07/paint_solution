@@ -1,0 +1,71 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Area </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/areaupdate/{{area.pin_code}}/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="pincode">Pin Code</label>
+            <input type="number" class="form-control" id="pincode" placeholder="Enter Pin Code" name="txtpincode"
+              value="{{area.pin_code}}" required maxlength="6" required><br>
+          </div>
+          <div class="form-group">
+            <label for="Area_name">Area Name</label>
+            <input type="text" class="form-control" id="Area_name" placeholder="Enter Area Name"
+              value="{{area.area_name}}" name="txtareaname" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">City Name</label>
+            <select class="form-control form-control-lg" id="exampleFormControlSelect1" name="city_id">
+              {% for i in cities %}
+              {% if i.city_id == area.city_id %}
+              <option value="{{i.city_id}}" selected>{{i.city_name}}</option>
+              {%else%}
+              <option value="{{i.city_id}}">{{i.city_name}}</option>
+              {%endif%}
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Update</button>
+          <button class="btn btn-light">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AREA EDIT</title>
+</head>
+<body>
+<h1><center>AREA EDIT</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/areaupdate/{{area.pin_code}}/">
+    {% csrf_token %}
+    Pin code:<input type="text" name="txtpincode" value="{{area.pin_code}}" required maxlength="6"><br>
+    Area name:<input type="text" name="txtareaname" value="{{area.area_name}}" required><br>
+    City Name:<select name="city_id">
+    {% for i in cities %}
+    <option value="{{i.city_id}}">{{i.city_name}}</option><br>
+    {% endfor %}
+    </select>
+    <input type="submit" value="Update">
+</form>
+</body>
+</html>

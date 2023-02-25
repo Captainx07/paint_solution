@@ -1,0 +1,82 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Service Order</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="1">
+                    <a href="/serviceorderadd/">
+                        <button type="button" class="btn bg-gradient-primary text-white">Add</button>
+                    </a>
+                    <thead>
+                        <tr style="color:black ;">
+                            <th>Service Order Id</th>
+                            <th>Customer Id</th>
+                            <th>Order Date</th>
+                            <th>Estimated Total Amount</th>
+                            <th>option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in ServiceOrder %}
+                        <tr style="color:black ;">
+                            <td>{{ i.service_o_id}}</td>
+                            <td>{{i.customer_id}}</td>
+                            <td>{{i.order_date}}</td>
+                            <td>{{i.estimated_total}}</td>
+                            <td><a href="/serviceorderdelete/{{ i.service_o_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                <a href="/serviceorderedit/{{ i.service_o_id}}/"><button type="button"
+                                        class="btn bg-gradient-primary text-white">Edit</button></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SERVICE ORDER</title>
+</head>
+<body>
+<h1><center>SERVICE ORDER</center></h1>
+<a href="/home/">BACK</a><br>
+<center>
+<table border="1">
+    <thead>
+        <tr>
+            <th>SERVICE ORDER ID</th>
+            <th>CUSTOMER ID</th>
+            <th>ORDER DATE</th>
+            <th>ESTIMATED TOTAL AMOUNT</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in ServiceOrder %}
+        <tr>
+            <td>{{ i.service_o_id}}</td>
+            <td>{{i.customer_id}}</td>
+            <td>{{i.order_date}}</td>
+            <td>{{i.estimated_total}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</center>
+</body>
+</html>

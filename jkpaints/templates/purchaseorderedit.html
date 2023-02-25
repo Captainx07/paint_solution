@@ -1,0 +1,51 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Purchase Order </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <form class="table-responsive" method="post"
+                    action="/purchaseorderupdate/{{purchaseorder.purchase_o_id}}/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="Supplier">Supplier Id</label>
+                        <select class="form-control" id="Supplier" name="supplier_id">
+                            {% for i in supplier %}
+                            {% if i.supplier_id == purchaseorder.supplier_id %}
+                            <option value="{{i.supplier_id}}" selected>{{i.supplier_name}}</option>
+                            {%else%}
+                            <option value="{{i.supplier_id}}">{{i.supplier_name}}</option>
+                            {% endfor %}
+                            {%endif%}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Date">Order Date</label>
+                        <input type="date" class="form-control" id="Date" placeholder="Enter Order Date" name="txtdate"
+                            value="{{purchaseorder.order_date|date:'d-m-Y'}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Amount">Total Amount</label>
+                        <input type="number" class="form-control" id="Amount" placeholder="Enter  Amount"
+                            name="txttotal" value="{{purchaseorder.total}}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Shipping">Shipping handling</label>
+                        <input type="text" class="form-control" id="Shipping" placeholder="Enter  shipping handling"
+                            name="txtshipping" value="{{purchaseorder.shipping_handling}}" required>
+                    </div>
+                    <button type="submit" class="btn  bg-gradient-primary text-white">Update</button>
+                    <button class="btn btn-light">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

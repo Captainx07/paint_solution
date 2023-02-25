@@ -1,0 +1,71 @@
+{%extends "m1.html"%}
+{% block data %}
+
+<div class="container-fluid">
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Supplier </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/supplieradd/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="sname">supplier Name</label>
+            <input type="text" class="form-control" id="sname" placeholder="Enter Supplier Nmae" name="txtsname "
+              required>
+          </div>
+          <div class="form-group">
+            <label for="cname">Company Name</label>
+            <input type="text" class="form-control" id="cname" placeholder="Enter Company Name" name="txtcname "
+              required>
+          </div>
+          <div class="form-group">
+            <label for="aname">Address</label>
+            <input type="text" class="form-control" id="aname" placeholder="Enter Address" name="txtadd" required>
+          </div>
+          <div class="form-group">
+            <label for="cname">Contect Number</label>
+            <input type="number" class="form-control" id="cname" placeholder="Enter Contect Number" name="txtcont"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="ename">Email</label>
+            <input type="text" class="form-control" id="ename" placeholder="Enter Email" name="txtemail" required>
+          </div>
+          <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
+          <button class="btn btn-light">Cancel</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SUPPLIER ADD</title>
+</head>
+<body>
+<h1><center>SUPPLIER ADD</center></h1>
+<a href="/home/">BACK</a><br>
+<form method="POST" action="/supplieradd/">
+    {% csrf_token %}
+    Supplier name:<input type="text" name="txtsname"required><br>
+    Company name:<input type="text" name="txtcname"required><br>
+    Address:<input type="text" name="txtadd"required><br>
+    Contact Number:<input type="number" name="txtcont" required maxlength="10"><br>
+    Email id:<input type="email" name="txtemail" required><br>
+            <input type="submit" value="Add">
+</form>
+</body>
+</html>
