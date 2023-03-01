@@ -31,6 +31,17 @@ class Brand(models.Model):
         managed = False
         db_table = 'brand'
 
+class Cart(models.Model):
+    cart_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey('Customer', models.DO_NOTHING)
+    product_d = models.ForeignKey('ProductDetails', models.DO_NOTHING)
+    qty = models.IntegerField()
+    price = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'cart'
+
 
 class City(models.Model):
     city_id = models.AutoField(primary_key=True)

@@ -17,6 +17,8 @@ def userlogin(request):
         for us in customer:
             i = i+1
             request.session['customer'] = us.email_id
+            request.session['cid'] = us.customer_id
+            
             return redirect("/user")
     return render(request, "user/clogin.html")
 
@@ -31,6 +33,32 @@ def productdetailslist(request,id):
 def proddetails(request,id):
     pdetails=ProductDetails.objects.get(product_d_id=id)
     return render(request, 'user/proddetails.html', {"i":pdetails})
+
+def addtocart(request,id):
+    if request.session.has_key('cid'):
+        pass
+    else:
+        return redirect('/userlogin/')
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    proddetails=ProductDetails.objects.get(product_d_id=id)
+    rate=proddetails.price
+    cds=Cart.objects.filter(product_d=proddetails,customer=cust,price=rate)
+    cnt=0
+    for cd in cds:
+        cnt=cnt+1
+        cd.qty=cd.qty+1
+        cd.save()
+    if cnt==0:
+        cart=Cart(customer=cust,product_d=proddetails,qty=1)
+        cart.save()
+    return redirect('/cart/')
+
+def viewcart(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    cds=Cart.objects.filter(customer=cust)
+    return render(request,'user/cart.html',{'proddetails':cds})
     
 def userpage(request):
     return render(request, 'user/userindex.html')
