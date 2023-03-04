@@ -28,9 +28,35 @@ def productdetailslist(request,id):
     obj = ProductDetails.objects.filter(product_id=id)
     return render(request, 'user/productdetailsgrid.html', {"productdetails":obj})
 
-def proddetails(request,id):
+def productdetails1(request,id):
     pdetails=ProductDetails.objects.get(product_d_id=id)
     return render(request, 'user/proddetails.html', {"i":pdetails})
+
+def addtocart(request,id):
+    if request.session.has_key('cid'):
+        pass
+    else:
+        return redirect('/userlogin/')
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    proddetails=ProductDetails.objects.get(product_d_id=id)
+    rate=proddetails.price
+    cds=Cart.objects.filter(product_d=proddetails,customer=cust,price=rate)
+    cnt=0
+    for cd in cds:
+        cnt=cnt+1
+        cd.qty=cd.qty+1
+        cd.save()
+    if cnt==0:
+        cart=Cart(customer=cust,product_d=proddetails,qty=1)
+        cart.save()
+    return redirect('/cart/')
+
+def viewcart(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    cds=Cart.objects.filter(customer=cust)
+    return render(request,'user/cart.html',{'proddetails':cds})
     
 def userpage(request):
     return render(request, 'user/userindex.html')
@@ -756,9 +782,13 @@ def machineryadd(request):
         decri = request.POST.get("txtdecri")
         rcharge = request.POST.get("txtrcharge")
         mwork = request.POST.get("txtmwrok")
-        image = request.POST.get("txtimage")
+    
+        upload = request.FILES['image']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
         obj = Machinery(m_name=mname, description=decri,
-                        rent_charge=rcharge, machinery_work=mwork, image=image)
+                        rent_charge=rcharge, machinery_work=mwork, image=file_url)
         obj.save()
         return redirect("/machinery")
     return render(request, 'machineryadd.html')
@@ -793,7 +823,14 @@ def machineryupdate(request, id):
     machinery.description = request.POST.get("txtdes")
     machinery.rent_charge = request.POST.get("txtrcharge")
     machinery.machinery_work = request.POST.get("txtmwrok")
-    machinery.image = request.POST.get("txtimage")
+
+    image = request.POST.get("txtimage")
+   
+    upload = request.FILES['image']
+    fss = FileSystemStorage()
+    file = fss.save(upload.name, upload)
+    file_url = fss.url(file)
+    machinery.image=file_url
     machinery.save()
     return redirect("/machinery")
 
@@ -1109,8 +1146,8 @@ def productupdate(request, id):
     image = request.POST.get("txtimage")
     if image == "0":
         image = None
-    if len(request.FILES) !="0":
-        if(product.image) >"0":
+    if len(request.FILES) != 0:
+        if(len(product.image)) >0:
             os.remove(product.image)
         upload = request.FILES['image']
         fss = FileSystemStorage()
@@ -1985,71 +2022,6 @@ def serviceorderdetailsupdate(request, id):
     serviceorder = ServiceOrder.objects.all()
     service = Service.objects.all()
     return render(request, 'serviceorderdetailsadd.html', {'serviceorder': serviceorder, 'service': service})
-
-
-def servicesubcategoryshow(request):
-    if request.session.has_key('admin'):
-        pass
-    else:
-        return redirect('/login/')
-    obj = ServiceSubCategory.objects.all()
-    return render(request, 'servicesubcategory.html', {"ServiceSubCategory": obj})
-
-
-def servicesubcategoryadd(request):
-    if request.session.has_key('admin'):
-        pass
-    else:
-        return redirect('/login/')
-    if request.method == "POST":
-        ssname = request.POST.get("txtssname")
-        descri = request.POST.get("txtdescri")
-        scat = request.POST["s_category_id"]
-        image = request.POST.get("txtimage")
-
-        obj = ServiceSubCategory(
-            s_sub_name=ssname, description=descri, s_category_id=scat, image=image)
-        obj.save()
-        return redirect("/servicesubcategory")
-    scategory = ServiceCategory.objects.all()
-    return render(request, 'servicesubcategoryadd.html', {'scategory': scategory})
-
-
-def servicesubcategorydelete(request, id):
-    if request.session.has_key('admin'):
-        pass
-    else:
-        return redirect('/login/')
-    ssid = ServiceSubCategory.objects.get(s_sub_id=id)
-    ssid.delete()
-    return redirect("/servicesubcategory")
-
-
-def servicesubcategoryedit(request, id):
-    if request.session.has_key('admin'):
-        pass
-    else:
-        return redirect('/login/')
-    servicesubcategory = ServiceSubCategory.objects.get(s_sub_id=id)
-    scategory = ServiceCategory.objects.all()
-    return render(request, 'servicesubcategoryedit.html', {"servicesubcategory": servicesubcategory, "scategory": scategory})
-
-
-def servicesubcategoryupdate(request, id):
-    if request.session.has_key('admin'):
-        pass
-    else:
-        return redirect('/login/')
-    servicesubcategory = ServiceSubCategory.objects.get(s_sub_id=id)
-    servicesubcategory.s_sub_name = request.POST.get("txtssname")
-    servicesubcategory.description = request.POST.get("txtdescri")
-    servicesubcategory.s_category_id = request.POST["s_category_id"]
-    servicesubcategory.image = request.POST.get("txtimage")
-    servicesubcategory.save()
-    return redirect("/servicesubcategory")
-    scategory = ServiceCategory.objects.all()
-    return render(request, 'servicesubcategoyadd.html', {'scategory': scategory})
-
 
 def shadeshow(request):
     if request.session.has_key('admin'):

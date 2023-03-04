@@ -9,7 +9,7 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        <form class="table-responsive" method="post" action="/machineryupdate/{{machinery.m_id}}/">
+        <form class="table-responsive" method="post" action="/machineryupdate/{{machinery.m_id}}/" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="form-group">
             <label for="mname">Machinery Name</label>
@@ -32,9 +32,14 @@
               value="{{machinery.machinery_work}}" required>
           </div>
           <div class="form-group">
-            <label for="image">Image</label>
-            <input type="text" class="form-control" id="image" placeholder="Enter Image" value="{{machinery.image}}"
-              name="txtimage">
+            {% if machinery.image %}
+            <td><img src="{{machinery.image}}" alt="image hero" height="140" width="140"></td>
+            {% endif %}
+            <label for="img_url">Add image</label>
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="img_url" name="image">
+              <label class="custom-file-label" for="img_url">Add image...</label>
+            </div>
           </div>
           <button type="submit" class="btn  bg-gradient-primary text-white">Add</button>
           <button class="btn btn-light">Cancel</button>

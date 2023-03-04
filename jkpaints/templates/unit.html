@@ -26,7 +26,7 @@
                             <td>{{ i.unit_id}}</td>
                             <td>{{i.unit_name}}</td>
                             <td><a href="/unitdelete/{{i.unit_id}}/"><button type="button"
-                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                        class="btn bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
                                 <a href="/unitedit/{{i.unit_id}}/"><button type="button"
                                         class="btn bg-gradient-primary text-white">Edit</button></a>
                             </td>

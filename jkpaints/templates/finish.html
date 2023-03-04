@@ -25,7 +25,7 @@
                         <tr style="color:black ;">
                                 <td>{{ i.finish_id}}</td>
                                 <td>{{i.finish_name}}</td>
-                                 <td><a href="/finishdelete/{{ i.finish_id}}/"><button type="button" class="btn bg-gradient-primary text-white">Delete</button></a>
+                                 <td><a href="/finishdelete/{{ i.finish_id}}/"><button type="button" class="btn bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
                                     <a href="/finishedit/{{ i.finish_id}}/"><button type="button" class="btn bg-gradient-primary text-white">Edit</button></a></td>
                             </tr>
                         {% endfor %}

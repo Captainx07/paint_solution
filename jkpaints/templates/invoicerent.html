@@ -32,7 +32,7 @@
                             <td>{{i.days}}</td>
                             <td>{{i.rent_charge}}</td>
                             <td><a href="/invoicerentdelete/{{i.invoice_r_id}}/"><button type="button"
-                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                        class="btn bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
                                 <a href="/invoicerentedit/{{i.invoice_r_id}}/"><button type="button"
                                         class="btn bg-gradient-primary text-white">Edit</button></a>
                             </td>

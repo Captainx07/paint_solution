@@ -52,7 +52,7 @@ class Customer(models.Model):
     email_id = models.CharField(max_length=30)
     password = models.CharField(max_length=20)
     pin_code = models.ForeignKey(Area, models.DO_NOTHING, db_column='pin_code')
-    image = models.CharField(max_length=40)
+    image = models.CharField(max_length=200, blank=True, null=True)
     def __str__(self):
         return self.customer_name
 
@@ -318,7 +318,6 @@ class Scheduling(models.Model):
     service_o = models.ForeignKey('ServiceOrder', models.DO_NOTHING)
     instruction = models.CharField(max_length=50)
     status = models.CharField(max_length=40)
-
     class Meta:
         managed = False
         db_table = 'scheduling'
@@ -329,7 +328,7 @@ class Service(models.Model):
     service_name = models.CharField(max_length=50)
     description = models.CharField(max_length=400)
     service_charge = models.IntegerField()
-    s_sub = models.ForeignKey('ServiceSubCategory', models.DO_NOTHING)
+    s_category = models.ForeignKey('ServiceCategory', models.DO_NOTHING)
     def __str__(self):
         return self.service_name
 
@@ -370,18 +369,6 @@ class ServiceOrderDetails(models.Model):
     class Meta:
         managed = False
         db_table = 'service_order_details'
-
-
-class ServiceSubCategory(models.Model):
-    s_sub_id = models.AutoField(primary_key=True)
-    s_sub_name = models.CharField(max_length=50)
-    description = models.CharField(max_length=300)
-    s_category = models.ForeignKey(ServiceCategory, models.DO_NOTHING)
-    image = models.CharField(max_length=50, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'service_sub_category'
 
 
 class Shade(models.Model):
