@@ -17,6 +17,8 @@ def userlogin(request):
         for us in customer:
             i = i+1
             request.session['customer'] = us.email_id
+            request.session['cid'] = us.customer_id
+            
             return redirect("/user")
     return render(request, "user/clogin.html")
 
