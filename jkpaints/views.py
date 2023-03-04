@@ -1802,7 +1802,7 @@ def serviceadd(request):
                       service_charge=scharge, s_sub_id=ssub)
         obj.save()
         return redirect("/service")
-    sscategory = ServiceSubCategory.objects.all()
+    sscategory = ServiceCategory.objects.all()
     return render(request, 'serviceadd.html', {'sscategory': sscategory})
 
 
@@ -1822,7 +1822,7 @@ def serviceedit(request, id):
     else:
         return redirect('/login/')
     service = Service.objects.get(service_id=id)
-    sscategory = ServiceSubCategory.objects.all()
+    sscategory = ServiceCategory.objects.all()
     return render(request, 'serviceedit.html', {"service": service, "sscategory": sscategory})
 
 
