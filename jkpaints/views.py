@@ -30,7 +30,7 @@ def productdetailslist(request,id):
     obj = ProductDetails.objects.filter(product_id=id)
     return render(request, 'user/productdetailsgrid.html', {"productdetails":obj})
 
-def proddetails(request,id):
+def productdetails1(request,id):
     pdetails=ProductDetails.objects.get(product_d_id=id)
     return render(request, 'user/proddetails.html', {"i":pdetails})
 
