@@ -34,7 +34,7 @@
                                 <td>{{i.address}}</td>
                                 <td>{{i.contact_number}}</td>
                                 <td>{{i.email_id}}</td>
-                                <td>{{i.password}}</td>
+                                <td>********</td>
                                 <td>{{i.pin_code.area_name}}
                                     <br>({{i.pin_code.pin_code}})</td>
                                 {% if i.image %}
@@ -42,7 +42,7 @@
                                 {% else %}
                                     <td>No Image Found</td>
                                 {% endif %}
-                                <td><a href="/customerdelete/{{ i.customer_id}}/"><button type="button" class="btn btn bg-gradient-primary text-white">Delete</button></a>
+                                <td><a href="/customerdelete/{{ i.customer_id}}/"><button type="button" class="btn btn bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
                                     <a href="/customeredit/{{ i.customer_id}}/"><button type="button" class="btn btn bg-gradient-primary text-white">Edit</button></a></td>
                             </tr>
                         {% endfor %}

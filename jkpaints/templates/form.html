@@ -25,7 +25,7 @@
                         <tr style="color:black ;">
                             <td>{{ i.form_id}}</td>
                             <td>{{i.form_name}}</td>
-                            <td><a href="/formdelete/{{ i.form_id}}/"><button type="button" class="btn bg-gradient-primary text-white">Delete</button></a>
+                            <td><a href="/formdelete/{{ i.form_id}}/"><button type="button" class="btn bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
                                 <a href="/formedit/{{ i.form_id}}/"><button type="button" class="btn bg-gradient-primary text-white">Edit</button></a></td>
                         </tr>
                         {% endfor %}

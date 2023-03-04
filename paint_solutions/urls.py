@@ -26,9 +26,12 @@ urlpatterns = [
 
     path('userlogin/',views.userlogin),
     path('user/',views.userpage),
+
     path('productlist/',views.productlist),
     path('productdetailslist/<int:id>/',views.productdetailslist),
-    path('proddetails/<int:id>/', views.proddetails),
+    path('productdetails1/<int:id>/', views.productdetails1),
+    path('addtocart/<int:id>/', views.addtocart),
+    path('cart/', views.viewcart),
 
 
 
@@ -225,11 +228,6 @@ urlpatterns = [
     path('serviceorderdetailsedit/<int:id>/', views.serviceorderdetailsedit),
     path('serviceorderdetailsupdate/<int:id>/', views.serviceorderdetailsupdate),
 
-    path('servicesubcategory/',views.servicesubcategoryshow),
-    path('servicesubcategoryadd/', views.servicesubcategoryadd),
-    path('servicesubcategorydelete/<int:id>/', views.servicesubcategorydelete),
-    path('servicesubcategoryedit/<int:id>/', views.servicesubcategoryedit),
-    path('servicesubcategoryupdate/<int:id>/', views.servicesubcategoryupdate),
 
     path('shade/',views.shadeshow),
     path('shadeadd/',views.shadeadd),

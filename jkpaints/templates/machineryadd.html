@@ -4,41 +4,50 @@
 <div class="container-fluid">
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
-      <div class="card-header py-3">
-          <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Machinary </h6>
-      </div>
-      <div class="card-body">
-          <div class="table-responsive">
-                  <form class="table-responsive" method="post" action="/machineryadd/">
-                    {% csrf_token %}
-                    <div class="form-group">
-                      <label for="mname">Machinery Name</label>
-                      <input type="text" class="form-control" id="mname" placeholder="Enter Machinery Name" name="txtmname" required >
-                    </div>
-                    <div class="form-group">
-                      <label for="Description">Description</label>
-                      <input type="text" class="form-control" id="Description" placeholder="Enter Description" name="txtdecri" required >
-                    </div>
-                    <div class="form-group">
-                      <label for="Rent_charge">Rent charge</label>
-                      <input type="number" class="form-control" id="Rent_charge" placeholder="Enter Rent Charge" name="txtrcharge" required >
-                    </div>
-                    <div class="form-group">
-                      <label for="Machine_Work">Machine Work</label>
-                      <input type="text" class="form-control" id="Machine_Work" placeholder="Enter Machine Work" name="txtmwrok" required >
-                    </div>
-                    <div class="form-group">
-                      <label for="image">Image</label>
-                      <input type="text" class="form-control" id="image" placeholder="Enter Image" name="txtimage" >
-                    </div>
-                    <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
-                </div>
-              </div>
-            </div>
+    <div class="card-header py-3">
+      <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Machinary </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <form class="table-responsive" method="post" action="/machineryadd/">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="mname">Machinery Name</label>
+            <input type="text" class="form-control" id="mname" placeholder="Enter Machinery Name" name="txtmname"
+              required>
           </div>
-       
+          <div class="form-group">
+            <label for="Description">Description</label>
+            <input type="text" class="form-control" id="Description" placeholder="Enter Description" name="txtdecri"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="Rent_charge">Rent charge</label>
+            <input type="number" class="form-control" id="Rent_charge" placeholder="Enter Rent Charge" name="txtrcharge"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="Machine_Work">Machine Work</label>
+            <input type="text" class="form-control" id="Machine_Work" placeholder="Enter Machine Work" name="txtmwrok"
+              required>
+          </div>
+          <div class="form-group">
+            <label for="img_url">Add image</label>
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="img_url" name="image">
+              <label class="custom-file-label" for="img_url">Add image...</label>
+            </div>
+            <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
+            <button class="btn btn-light">Cancel</button>
+         </div>
+      <button type="submit" class="btn bg-gradient-primary text-white">Add</button>
+      <button class="btn btn-light">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
 {% endblock %}
 
 
