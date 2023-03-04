@@ -26,7 +26,7 @@
                             <td>{{ i.work_id}}</td>
                             <td>{{i.work_name}}</td>
                             <td><a href="/workdelete/{{i.work_id}}/"><button type="button"
-                                        class="btn bg-gradient-primary text-white">Delete</button></a>
+                                        class="btn bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
                                 <a href="/workedit/{{i.work_id}}/"><button type="button"
                                         class="btn bg-gradient-primary text-white">Edit</button></a>
                             </td>
