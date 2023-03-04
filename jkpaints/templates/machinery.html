@@ -32,10 +32,14 @@
               <td>{{i.description}}</td>
               <td>{{i.rent_charge}}</td>
               <td>{{i.machinery_work}}</td>
-              <td>{{i.image}}</td>
-              <td><a href="/machinerydelete/{{i.m_id}}/"><button type="button"
-                    class="btn  bg-gradient-primary text-white">Delete</button></a>
-                <a href="/machineryedit/{{i.m_id}}/"><button type="button"
+              {% if i.image %}
+              <td><img src="{{i.image}}" height="140" width="140"></td>
+              {% else %}
+              <td>No Image Found</td>
+              {% endif %}
+              <td><a href="/machinerydelete/{{ i.m_id}}/"><button type="button"
+                    class="btn  bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
+                <a href="/machineryedit/{{ i.m_id}}/"><button type="button"
                     class="btn  bg-gradient-primary text-white">Edit</button></a>
               </td>
             </tr>

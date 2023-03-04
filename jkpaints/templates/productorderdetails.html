@@ -34,7 +34,7 @@
               <td>{{i.description}}</td>
               <td>{{i.price}}</td>
               <td><a href="/productorderdetailsdelete/{{ i.product_od_id}}/"><button type="button"
-                    class="btn  bg-gradient-primary text-white">Delete</button></a>
+                    class="btn  bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
                 <a href="/productorderdetailsedit/{{ i.product_od_id}}/"><button type="button"
                     class="btn  bg-gradient-primary text-white">Edit</button></a>
               </td>

@@ -27,7 +27,7 @@
             <td>{{i.area_name}}</td>
             <td>{{i.city}}</td>
             <td><a href="/areadelete/{{ i.pin_code}}/"><button type="button"
-                  class="btn bg-gradient-primary text-white">Delete</button></a>
+                  class="btn bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
               <a href="/areaedit/{{ i.pin_code}}/"><button type="button"
                   class="btn bg-gradient-primary text-white">Edit</button></a>
             </td>
