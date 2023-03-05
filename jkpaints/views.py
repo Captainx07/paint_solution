@@ -22,13 +22,15 @@ def userlogin(request):
             return redirect("/user")
     return render(request, "user/clogin.html")
 
+
+
 def productlist(request):
     obj = Product.objects.all()
     return render(request, 'user/productgrid.html', {"Product": obj})
 
 def productdetailslist(request,id):
     obj = ProductDetails.objects.filter(product_id=id)
-    return render(request, 'user/productdetailsgrid.html', {"productdetails":obj})
+    return render(request, 'user/productdetailslist.html', {"productdetails":obj})
 
 def productdetails1(request,id):
     pdetails=ProductDetails.objects.get(product_d_id=id)
@@ -59,9 +61,48 @@ def viewcart(request):
     cust=Customer.objects.get(customer_id=cid)
     cds=Cart.objects.filter(customer=cust)
     return render(request,'user/cart.html',{'proddetails':cds})
+
+def machinerylist(request):
+    obj = Machinery.objects.all()
+    return render(request, 'user/machinerylist.html', {"machinery": obj})
+
+#def machinerydetailslist(request,id):
+ #   obj = machinerydetailslist.objects.filter(machinery_id=id)
+ #   return render(request, 'user/machinerydetailslist.html', {"machinerydetails":obj})
+
+def machineryaddtocart(request,id):
+    if request.session.has_key('cid'):
+        pass
+    else:
+        return redirect('/userlogin/')
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    machinery=machinery.objects.get(machinery_id=id)
+    rate=machinery.rent_price
+    cds=Cart.objects.filter(machinery=machinery,customer=cust,rent_price=rate)
+    cnt=0
+    for cd in cds:
+        cnt=cnt+1
+        cd.qty=cd.qty+1
+        cd.save()
+    if cnt==0:
+        cart=Cart(customer=cust,machinery=machinery,qty=1)
+        cart.save()
+    return redirect('/machinerycart/')
+
+def machinerycart(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    cds=Cart.objects.filter(customer=cust)
+    return render(request,'user/machinerycart.html',{'machinery':cds})
+
+
+
     
 def userpage(request):
     return render(request, 'user/userindex.html')
+
+
 
 #---------------------------------------------------------------------------------------------------
 # ===================================== Admin Views =================================================
@@ -781,16 +822,15 @@ def machineryadd(request):
         return redirect('/login/')
     if request.method == "POST":
         mname = request.POST.get("txtmname")
-        decri = request.POST.get("txtdecri")
+        descri = request.POST.get("txtdescri")
         rcharge = request.POST.get("txtrcharge")
-        mwork = request.POST.get("txtmwrok")
-    
+        mwork = request.POST.get("txtmwork")
         upload = request.FILES['image']
         fss = FileSystemStorage()
         file = fss.save(upload.name, upload)
         file_url = fss.url(file)
-        obj = Machinery(m_name=mname, description=decri,
-                        rent_charge=rcharge, machinery_work=mwork, image=file_url)
+        obj = Machinery(m_name=mname, description=descri,
+                        rent_charge=rcharge, machinery_work=mwork,image=file_url)
         obj.save()
         return redirect("/machinery")
     return render(request, 'machineryadd.html')
@@ -822,9 +862,9 @@ def machineryupdate(request, id):
         return redirect('/login/')
     machinery = Machinery.objects.get(m_id=id)
     machinery.m_name = request.POST.get('txtmname')
-    machinery.description = request.POST.get("txtdes")
+    machinery.description = request.POST.get("txtdescri")
     machinery.rent_charge = request.POST.get("txtrcharge")
-    machinery.machinery_work = request.POST.get("txtmwrok")
+    machinery.machinery_work = request.POST.get("txtmwork")
 
     image = request.POST.get("txtimage")
    

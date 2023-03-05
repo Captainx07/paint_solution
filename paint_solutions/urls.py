@@ -19,7 +19,6 @@ from jkpaints import views
 from django.conf.urls.static import static
 from paint_solutions import settings
 urlpatterns = [
-
 #---------------------------------------------------------------------------------------------------
 # ===================================== Users Urls =================================================
 #---------------------------------------------------------------------------------------------------
@@ -27,13 +26,20 @@ urlpatterns = [
     path('userlogin/',views.userlogin),
     path('user/',views.userpage),
 
+    
+
     path('productlist/',views.productlist),
     path('productdetailslist/<int:id>/',views.productdetailslist),
     path('productdetails1/<int:id>/', views.productdetails1),
     path('addtocart/<int:id>/', views.addtocart),
     path('cart/', views.viewcart),
 
+    path('machinerylist/',views.machinerylist),
+    path('machinerycart/<int:id>/', views.machinerycart),
+    path('machinerycart/', views.viewcart),
+    
 
+    
 
 
 
