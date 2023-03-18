@@ -103,7 +103,6 @@ def checkout(request):
     
     for cart in carts:
         cart.delete()
-
     return render(request, 'user/checkout.html',{'cart':cart})
    
 def userpage(request):
@@ -625,14 +624,14 @@ def invoicerentadd(request):
             pass
     else:
         return redirect('/login/')
-    invoice = request.POST["invoice_id"]
-    machinery = request.POST["m_id"]
-    day = request.POST.get("txtday")
-    charge = request.POST.get("txtchare")
-    obj = InvoiceRent(invoice_id=invoice, m_id=machinery,
+        invoice = request.POST["invoice_id"]
+        machinery = request.POST["m_id"]
+        day = request.POST.get("txtday")
+        charge = request.POST.get("txtchare")
+        obj = InvoiceRent(invoice_id=invoice, m_id=machinery,
                           days=day, rent_charge=charge)
-    obj.save()
-    return redirect("/invoicerent")
+        obj.save()
+        return redirect("/invoicerent")
     invoice = Invoice.objects.all()
     machinery = Machinery.objects.all()
     return render(request, 'invoicerentadd.html', {'invoice': invoice, 'machinery': machinery})
@@ -1065,9 +1064,6 @@ def paymentupdate(request, id):
     payment.amount = request.POST.get("txtamount")
     payment.save()
     return redirect("/payment")
-    invoice = Invoice.objects.all()
-    return render(request, 'paymentadd.html', {'invoice': invoice})
-
 
 def productshow(request):
     if request.session.has_key('admin'):
@@ -1197,15 +1193,7 @@ def productupdate(request, id):
         file_url = fss.url(file)
         product.image=file_url
     product.save()
-
     return redirect("/product")
-    brand = Brand.objects.all()
-    pcategory = PCategory.objects.all()
-    ptype = Ptype.objects.all()
-    pform = Form.objects.all()
-    pfinish = Finish.objects.all()
-    return render(request, 'productadd.html',
-                  {'brand': brand, 'pcategory': pcategory, 'ptype': ptype, 'pform': pform, 'pfinish': pfinish})
 
 
 def productdetailsshow(request):
@@ -1272,12 +1260,6 @@ def productdetailsupdate(request, id):
     productdetails.product_id = request.POST["product_id"]
     productdetails.save()
     return redirect("/productdetails")
-    product = Product.objects.all()
-    size = Size.objects.all()
-    shade = Shade.objects.all()
-    return render(request, 'productdetailsadd.html',
-                  {'size': size, 'shade': shade, 'product': product})
-
 
 def productordershow(request):
     if request.session.has_key('admin'):
@@ -1361,9 +1343,6 @@ def productorderupdate(request, id):
     productorder.track_no=track_no
     productorder.save()
     return redirect("/productorder")
-    customer = Customer.objects.all()
-    offer = Offer.objects.all()
-    return render(request, 'productorderadd.html', {'customer': customer, 'offer': offer})
 
 
 def productorderdetailsshow(request):
@@ -1428,10 +1407,7 @@ def productorderdetailsupdate(request, id):
     productorderdetails.qty = request.POST.get("txtqty")
     productorderdetails.save()
     return redirect("/productorderdetails")
-    product = ProductOrder.objects.all()
-    productdetails = ProductDetails.objects.all()
-    return render(request, 'productorderdetails.add', {'product': product, 'productdetails': productdetails})
-
+ 
 
 def ptypeshow(request):
     if request.session.has_key('admin'):
@@ -1544,9 +1520,7 @@ def purchaseorderupdate(request, id):
     purchaseorder.shipping_handling = request.POST.get("txtshipping")
     purchaseorder.save()
     return redirect("/purchaseorder")
-    supplier = Supplier.objects.all()
-    return render(request, 'purchaseorderadd.html', {'supplier': supplier})
-
+ 
 
 def purchaseorderdetailsshow(request):
     if request.session.has_key('admin'):
@@ -1612,11 +1586,7 @@ def purchaseorderdetailsupdate(request, id):
     purchaseorderdetails.description = request.POST.get("txtdis")
     purchaseorderdetails.save()
     return redirect("/productorderdetails")
-    puo = PurchaseOrder.objects.all()
-    productdetails = ProductDetails.objects.all()
-    return render(request, 'purchaseorderdetailsadd.html', {'puo': puo, 'productdetails': productdetails})
-
-
+  
 def rentordershow(request):
     if request.session.has_key('admin'):
         pass
@@ -1743,10 +1713,7 @@ def rentorderdetailsupdate(request, id):
     rentorderdetails.rent_m_charge = request.POST.get("txtprice")
     rentorderdetails.save()
     return redirect("/rentorderdetails")
-    rentoder = RentOrder.objects.all()
-    machorder = Machinery.objects.all()
-    return render(request, 'rentorderdetailsadd.html', {'rentoder': rentoder, 'machorder': machorder})
-
+  
 
 def schedulingshow(request):
     if request.session.has_key('admin'):
@@ -1811,10 +1778,6 @@ def schedulingupdate(request, id):
     scheduling.instruction = request.POST.get("txtins")
     scheduling.status = request.POST.get("txtstatus")
     return redirect("/scheduling")
-    jobworker = JobWorker.objects.all()
-    serviceorder = ServiceOrder.objects.all()
-    return render(request, 'schedulingadd.html', {"scheduling": scheduling, "jobworker": jobworker,
-                                                  "serviceorder": serviceorder})
 
 
 def serviceshow(request):
@@ -1876,9 +1839,6 @@ def serviceupdate(request, id):
     service.s_sub_id = request.POST["s_sub_id"]
     service.save()
     return redirect("/service")
-    sscategory = ServiceSubCategory.objects.all()
-    return render(request, 'serviceadd.html', {'sscategory': sscategory})
-
 
 def servicecategoryshow(request):
     if request.session.has_key('admin'):
@@ -1991,9 +1951,6 @@ def serviceorderupdate(request, id):
     serviceorder.estimated_total = request.POST.get("txttotal")
     serviceorder.save()
     return redirect("/serviceorder")
-    customer = Customer.objects.all()
-    return render(request, 'serviceorderadd.html', {'customer': customer})
-
 
 def serviceorderdetailsshow(request):
     if request.session.has_key('admin'):
@@ -2059,10 +2016,7 @@ def serviceorderdetailsupdate(request, id):
     serviceorderdetails.service_charge = request.POST.get("txtprice")
     serviceorderdetails.save()
     return redirect("/serviceorderdetails")
-    serviceorder = ServiceOrder.objects.all()
-    service = Service.objects.all()
-    return render(request, 'serviceorderdetailsadd.html', {'serviceorder': serviceorder, 'service': service})
-
+ 
 def shadeshow(request):
     if request.session.has_key('admin'):
         pass
@@ -2169,10 +2123,7 @@ def sizeupdate(request, id):
     size.unit_id = request.POST["unit_id"]
     size.save()
     return redirect("/size")
-    unit = Unit.objects.all()
-    return render(request, 'sizeadd.html', {'unit': unit})
-
-
+  
 def stateshow(request):
     if request.session.has_key('admin'):
         pass
@@ -2284,10 +2235,7 @@ def stockupdate(request, id):
     stock.total_type = request.POST.get("txtdt")
     stock.save()
     return redirect("/stock")
-    product = Product.objects.all()
-    return render(request, 'stockadd.html', {'product': product})
-
-
+ 
 def suppliershow(request):
     if request.session.has_key('admin'):
         pass
