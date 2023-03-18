@@ -254,7 +254,6 @@ class ProductOrderDetails(models.Model):
     product_d = models.ForeignKey(ProductDetails, models.DO_NOTHING)
     price = models.IntegerField()
     qty = models.IntegerField()
-    description = models.CharField(max_length=400)
 
     class Meta:
         managed = False

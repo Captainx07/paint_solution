@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 import os
+import datetime
 
 from .models import *
-
+from django.db.models import Max
 #---------------------------------------------------------------------------------------------------
 # ===================================== User Views =================================================
 #---------------------------------------------------------------------------------------------------
@@ -50,7 +51,7 @@ def addtocart(request,id):
         cd.qty=cd.qty+1
         cd.save()
     if cnt==0:
-        cart=Cart(customer=cust,product_d=proddetails,qty=1)
+        cart=Cart(customer=cust,product_d=proddetails,qty=1,price=rate)
         cart.save()
     return redirect('/cart/')
 
@@ -58,8 +59,53 @@ def viewcart(request):
     cid=request.session['cid']
     cust=Customer.objects.get(customer_id=cid)
     cds=Cart.objects.filter(customer=cust)
-    return render(request,'user/cart.html',{'proddetails':cds})
+    cart1=Cart.objects.all()
+    total = 0
+    for i in cart1:
+        total+=i.price*i.qty
+        i.save()
+    return render(request,'user/cart.html',{'cart':cds,'total':total,'cart1':cart1})
+
+def deletefromcart(request, id):
+    cart = Cart.objects.get(cart_id=id)
+    cart.delete()
+    return redirect("/cart")
+
+def retrivecart(request, id):
+    cart = Cart.objects.get(cart_id=id)
+    return render(request, 'user/cart.html', {'cart':cart})
+
+def cartupdate(request, id):
+    cart = Cart.objects.get(cart_id=id)
+    cart.qty=request.POST["qty"]
+    cart.save()
+    return redirect("/cart")
+
+def checkout(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    carts=Cart.objects.filter(customer=cust)
+    total=0
+    for cart in carts:
+        total+=cart.price*cart.qty
+    dt=datetime.datetime.now().date()
+    po=ProductOrder(customer=cust,date=dt,total=total,shipping_handling=100)
+    po.save()
+    poid=ProductOrder.objects.aggregate(Max('product_o_id'))
+    poobj=ProductOrder.objects.get(product_o_id=poid['product_o_id__max'])
+
+    for cart in carts:
+        prdodd=ProductDetails.objects.get(product_d_id=cart.product_d_id)
+        qty=cart.qty
+        rate=cart.price
+        pod=ProductOrderDetails(product_o=poobj,product_d=prdodd,price=rate,qty=qty)
+        pod.save()
     
+    for cart in carts:
+        cart.delete()
+
+    return render(request, 'user/checkout.html',{'cart':cart})
+   
 def userpage(request):
     return render(request, 'user/userindex.html')
 
@@ -118,7 +164,6 @@ def admindelete(request, id):
     aid = Admin.objects.get(admin_id=id)
     aid.delete()
     return redirect("/admin")
-
 
 def adminedit(request, id):
     admin = Admin.objects.get(admin_id=id)
@@ -193,8 +238,6 @@ def areaupdate(request, id):
     area.city_id = request.POST["city_id"]
     area.save()
     return redirect("/area")
-    city = City.objects.all()
-    return render(request, 'areaadd.html', {'city': city})
 
 
 def brandshow(request):
@@ -303,9 +346,7 @@ def cityupdate(request, id):
     city.state_id = request.POST["state_id"]
     city.save()
     return redirect("/city")
-    state = State.objects.all()
-    return render(request, 'stateadd.html', {'state': state})
-
+    
 
 def customershow(request):
     if request.session.has_key('admin'):
@@ -329,12 +370,16 @@ def customeradd(request):
         cuspass = request.POST.get("txtcuspass")
         pincode = request.POST["pin_code"]
         pin = Area.objects.get(pin_code=pincode)
-        upload = request.FILES['image']
-        fss = FileSystemStorage()
-        file = fss.save(upload.name, upload)
-        file_url = fss.url(file)
-        obj = Customer(customer_name=cusname, address=cusadd, contact_number=cuscon,
+        if len(request.FILES)>0:
+            upload = request.FILES['image']
+            fss = FileSystemStorage()
+            file = fss.save(upload.name, upload)
+            file_url = fss.url(file)
+            obj = Customer(customer_name=cusname, address=cusadd, contact_number=cuscon,
                        email_id=cusemail, password=cuspass, pin_code=pin, image=file_url)
+        else:
+            obj = Customer(customer_name=cusname, address=cusadd, contact_number=cuscon,
+                       email_id=cusemail, password=cuspass, pin_code=pin)
         obj.save()
         return redirect("/customer")
     area = Area.objects.all()
@@ -372,15 +417,19 @@ def customerupdate(request, id):
     pin_code = request.POST["pin_code"]
     pin = Area.objects.get(pin_code=pin_code)
     customer.pin_code = pin
-    image=request.FILES['image']
-    fss=FileSystemStorage()
-    file=fss.save(image.name,image)
-    fp=fss.url(file)
-    customer.image=fp
+    oldurl=request.POST.get("oldurl")
+    if len(request.FILES)>0:
+        image=request.FILES['image']
+        fss=FileSystemStorage()
+        file=fss.save(image.name,image)
+        fp=fss.url(file)
+        customer.image=fp
+        
+    else:
+        customer.image=oldurl
+        
     customer.save()
     return redirect("/customer")
-    area = Area.objects.all()
-    return render(request, 'customeradd.html', {'area': area})
 
 
 def finishshow(request):
@@ -560,11 +609,6 @@ def invoiceupdate(request, id):
     invoice.rent_od_id = rentod
     invoice.save()
     return redirect("/invoice")
-    customer = Customer.objects.all()
-    serviceod = ServiceOrderDetails.objects.all()
-    rentod = RentOrderDetails.objects.all()
-    return render(request, 'invoiceadd.html', {'customer': customer, 'serviceod': serviceod, 'rentod': rentod})
-
 
 def invoicerentshow(request):
     if request.session.has_key('admin'):
@@ -581,14 +625,14 @@ def invoicerentadd(request):
             pass
     else:
         return redirect('/login/')
-        invoice = request.POST["invoice_id"]
-        machinery = request.POST["m_id"]
-        day = request.POST.get("txtday")
-        charge = request.POST.get("txtchare")
-        obj = InvoiceRent(invoice_id=invoice, m_id=machinery,
+    invoice = request.POST["invoice_id"]
+    machinery = request.POST["m_id"]
+    day = request.POST.get("txtday")
+    charge = request.POST.get("txtchare")
+    obj = InvoiceRent(invoice_id=invoice, m_id=machinery,
                           days=day, rent_charge=charge)
-        obj.save()
-        return redirect("/invoicerent")
+    obj.save()
+    return redirect("/invoicerent")
     invoice = Invoice.objects.all()
     machinery = Machinery.objects.all()
     return render(request, 'invoicerentadd.html', {'invoice': invoice, 'machinery': machinery})
@@ -627,10 +671,6 @@ def invoicerentupdate(request, id):
     invoicerent.rent_charge = request.POST.get("txtchare")
     invoicerent.save()
     return redirect("/invoicerent")
-    invoice = Invoice.objects.all()
-    machinery = Machinery.objects.all()
-    return render(request, 'invoicerentadd.html', {'invoice': invoice, 'machinery': machinery})
-
 
 def invoiceserviceshow(request):
     if request.session.has_key('admin'):
@@ -647,14 +687,14 @@ def invoiceserviceadd(request):
             pass
     else:
         return redirect('/login/')
-        invoice = request.POST["invoice_id"]
-        service = request.POST["service_id"]
-        dimension = request.POST.get("txtdime")
-        charge = request.POST.get("txtchare")
-        obj = InvoiceService(invoice_id=invoice, service_id=service,
-                             dimension=dimension, service_charge=charge)
-        obj.save()
-        return redirect("/invoiceservice")
+    invoice = request.POST["invoice_id"]
+    service = request.POST["service_id"]
+    dimension = request.POST.get("txtdime")
+    charge = request.POST.get("txtchare")
+    obj = InvoiceService(invoice_id=invoice, service_id=service,
+                         dimension=dimension, service_charge=charge)
+    obj.save()
+    return redirect("/invoiceservice")
     invoice = Invoice.objects.all()
     service = Service.objects.all()
     return render(request, 'invoiceserviceadd.html', {'invoice': invoice, 'service': service})
@@ -1345,9 +1385,8 @@ def productorderdetailsadd(request):
         productdetails = request.POST["product_d_id"]
         price = request.POST.get("txtprice")
         qty = request.POST.get("txtqty")
-        discription = request.POST.get("txtdis")
         obj = ProductOrderDetails(
-            product_o_id=productorder, product_d_id=productdetails, price=price, qty=qty, description=discription)
+            product_o_id=productorder, product_d_id=productdetails, price=price, qty=qty)
         obj.save()
         return redirect("/productorderdetails")
     product = ProductOrder.objects.all()
@@ -1387,7 +1426,6 @@ def productorderdetailsupdate(request, id):
     productorderdetails.productdetails_id = request.POST["product_d_id"]
     productorderdetails.price = request.POST.get("txtprice")
     productorderdetails.qty = request.POST.get("txtqty")
-    productorderdetails.description = request.POST.get("txtdis")
     productorderdetails.save()
     return redirect("/productorderdetails")
     product = ProductOrder.objects.all()
