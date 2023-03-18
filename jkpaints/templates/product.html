@@ -43,12 +43,13 @@
                             <td>{{ i.material}}</td>
                             <td>{{ i.covering_capacity}}</td>
                             {% if i.image %}
-                                    <td><img src="{{i.image}}" height="140" width="140"></td>
-                                {% else %}
-                                    <td>No Image Found</td>
-                                {% endif %}
+                            <td><img src="{{i.image}}" height="140" width="140"></td>
+                            {% else %}
+                            <td>No Image Found</td>
+                            {% endif %}
                             <td><a href="/productdelete/{{ i.product_id}}/"><button type="button"
-                                        class="btn  bg-gradient-primary text-white" onclick="return confirm('Do you want to delete?');">Delete</button></a>
+                                        class="btn  bg-gradient-primary text-white"
+                                        onclick="return confirm('Do you want to delete?');">Delete</button></a>
                                 <a href="/productedit/{{ i.product_id}}/"><button type="button"
                                         class="btn  bg-gradient-primary text-white">Edit</button></a>
                             </td>

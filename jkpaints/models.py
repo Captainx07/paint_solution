@@ -339,6 +339,7 @@ class Service(models.Model):
     service_name = models.CharField(max_length=50)
     description = models.CharField(max_length=400)
     service_charge = models.IntegerField()
+    image = models.CharField(max_length=500)
     s_category = models.ForeignKey('ServiceCategory', models.DO_NOTHING)
     def __str__(self):
         return self.service_name
@@ -350,8 +351,9 @@ class Service(models.Model):
 
 class ServiceCategory(models.Model):
     s_category_id = models.AutoField(primary_key=True)
-    service_name = models.CharField(max_length=50)
+    category_name = models.CharField(max_length=50)
     description = models.CharField(max_length=300)
+    image = models.CharField(max_length=400)
 
     class Meta:
         managed = False

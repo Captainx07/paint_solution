@@ -30,8 +30,15 @@ urlpatterns = [
     path('productlist/',views.productlist),
     path('productdetailslist/<int:id>/',views.productdetailslist),
     path('productdetails1/<int:id>/', views.productdetails1),
-    path('addtocart/<int:id>/', views.addtocart),
-    path('cart/', views.viewcart),
+    path('productaddtocart/<int:id>/', views.productaddtocart),
+    path('productcart/', views.productcart),
+
+    path('servicelist/',views.servicelist),
+    path('servicedetailslist/<int:id>/',views.servicedetailslist),
+    path('serviceaddtocart/<int:id>/', views.serviceaddtocart),
+    
+
+
 
 
 

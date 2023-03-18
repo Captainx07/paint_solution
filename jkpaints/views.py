@@ -24,17 +24,17 @@ def userlogin(request):
 
 def productlist(request):
     obj = Product.objects.all()
-    return render(request, 'user/productgrid.html', {"Product": obj})
+    return render(request, 'user/productlist.html', {"Product": obj})
 
 def productdetailslist(request,id):
     obj = ProductDetails.objects.filter(product_id=id)
-    return render(request, 'user/productdetailsgrid.html', {"productdetails":obj})
+    return render(request, 'user/productdetailslist.html', {"productdetails":obj})
 
 def productdetails1(request,id):
     pdetails=ProductDetails.objects.get(product_d_id=id)
-    return render(request, 'user/proddetails.html', {"i":pdetails})
+    return render(request, 'user/productdetails1.html', {"i":pdetails})
 
-def addtocart(request,id):
+def productaddtocart(request,id):
     if request.session.has_key('cid'):
         pass
     else:
@@ -54,12 +54,46 @@ def addtocart(request,id):
         cart.save()
     return redirect('/cart/')
 
-def viewcart(request):
+def productcart(request):
     cid=request.session['cid']
     cust=Customer.objects.get(customer_id=cid)
     cds=Cart.objects.filter(customer=cust)
-    return render(request,'user/cart.html',{'proddetails':cds})
+    return render(request,'user/productcart.html',{'proddetails':cds})
+
+def servicelist(request):
+    obj = ServiceCategory.objects.all()
+    return render(request, 'user/servicelist.html', {"ServiceCategory": obj})
+
+def servicedetailslist(request,id):
+    obj = Service.objects.filter(s_category_id=id)
+    return render(request, 'user/servicedetailslist.html', {"servicedetails":obj})
+
+def serviceaddtocart(request,id):
+    if request.session.has_key('cid'):
+        pass
+    else:
+        return redirect('/userlogin/')
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    service=Service.objects.get(service_id=id)
+    rate=service.service_charge
+    cds=Cart.objects.filter(service=service,customer=cust,service_charge=rate)
+    cnt=0
+    for cd in cds:
+        cnt=cnt+1
+        
+        cd.save()
+    if cnt==0:
+        cart=Cart(customer=cust,service=service)
+        cart.save()
+    return redirect('/servicecart/')
     
+def servicecart(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    cds=Cart.objects.filter(customer=cust)
+    return render(request,'user/servicecart.html',{'service':cds})
+
 def userpage(request):
     return render(request, 'user/userindex.html')
 
@@ -1797,13 +1831,17 @@ def serviceadd(request):
         sname = request.POST.get("txtsname")
         descri = request.POST.get("txtdescri")
         scharge = request.POST.get("txtscharge")
-        ssub = request.POST["s_sub_id"]
+        scat = request.POST["s_category_id"]
+        upload = request.FILES['image']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
         obj = Service(service_name=sname, description=descri,
-                      service_charge=scharge, s_sub_id=ssub)
+                      service_charge=scharge, s_category_id=scat,image=file_url)
         obj.save()
         return redirect("/service")
-    sscategory = ServiceCategory.objects.all()
-    return render(request, 'serviceadd.html', {'sscategory': sscategory})
+    scategory = ServiceCategory.objects.all()
+    return render(request, 'serviceadd.html', {'scategory': scategory})
 
 
 def servicedelete(request, id):
@@ -1822,8 +1860,8 @@ def serviceedit(request, id):
     else:
         return redirect('/login/')
     service = Service.objects.get(service_id=id)
-    sscategory = ServiceCategory.objects.all()
-    return render(request, 'serviceedit.html', {"service": service, "sscategory": sscategory})
+    scategory = ServiceCategory.objects.all()
+    return render(request, 'serviceedit.html', {"service": service, "scategory": scategory})
 
 
 def serviceupdate(request, id):
@@ -1835,11 +1873,16 @@ def serviceupdate(request, id):
     service.service_name = request.POST.get("txtsname")
     service.description = request.POST.get("txtdescri")
     service.service_charge = request.POST.get("txtscharge")
-    service.s_sub_id = request.POST["s_sub_id"]
+    service.s_category_id = request.POST["s_category_id"]
+    upload = request.FILES['image']
+    fss = FileSystemStorage()
+    file = fss.save(upload.name, upload)
+    file_url = fss.url(file)
+    service.image=file_url
     service.save()
     return redirect("/service")
-    sscategory = ServiceSubCategory.objects.all()
-    return render(request, 'serviceadd.html', {'sscategory': sscategory})
+    scategory = ServiceCategory.objects.all()
+    return render(request, 'serviceadd.html', {'scategory': scategory})
 
 
 def servicecategoryshow(request):
@@ -1859,7 +1902,11 @@ def servicecategoryadd(request):
     if request.method == "POST":
         scname = request.POST.get("txtscname")
         descri = request.POST.get("txtdescri")
-        obj = ServiceCategory(service_name=scname, description=descri)
+        upload = request.FILES['image']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
+        obj = ServiceCategory(category_name=scname, description=descri,image=file_url)
         obj.save()
         return redirect("/servicecategory")
     return render(request, 'servicecategoryadd.html')
@@ -1890,8 +1937,13 @@ def servicecategoryupdate(request, id):
     else:
         return redirect('/login/')
     servicecategory = ServiceCategory.objects.get(s_category_id=id)
-    servicecategory.service_name = request.POST.get('txtscname')
+    servicecategory.category_name = request.POST.get('txtscname')
     servicecategory.description = request.POST.get("txtdescri")
+    upload = request.FILES['image']
+    fss = FileSystemStorage()
+    file = fss.save(upload.name, upload)
+    file_url = fss.url(file)
+    servicecategory.image=file_url
     servicecategory.save()
     return redirect("/servicecategory")
 
