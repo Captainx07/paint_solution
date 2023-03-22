@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'paint_solutions.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'paints_solution',
+        'NAME': 'paint_solution',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',

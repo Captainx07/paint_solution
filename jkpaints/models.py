@@ -154,13 +154,27 @@ class Machinery(models.Model):
     description = models.CharField(max_length=300)
     rent_charge = models.IntegerField()
     machinery_work = models.CharField(max_length=400)
-    image = models.CharField(max_length=40, blank=True, null=True)
+    image = models.CharField(max_length=400, blank=True, null=True)
     def __str__(self):
         return self.m_name
 
     class Meta:
         managed = False
         db_table = 'machinery'
+
+
+class Machinerycart(models.Model):
+    machcart_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(Customer, models.DO_NOTHING)
+    m = models.ForeignKey(Machinery, models.DO_NOTHING)
+    description = models.CharField(max_length=500)
+    qty = models.IntegerField()
+    price = models.IntegerField()
+    requirement_days = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'machinerycart'
 
 
 class Offer(models.Model):
@@ -312,8 +326,9 @@ class RentOrderDetails(models.Model):
     rent_o = models.ForeignKey(RentOrder, models.DO_NOTHING)
     rent_m = models.ForeignKey(Machinery, models.DO_NOTHING)
     description = models.CharField(max_length=300)
+    qty = models.IntegerField()
     requirement_days = models.IntegerField()
-    return_date = models.DateField(db_column='return_Date')  # Field name made lowercase.
+    return_date = models.DateField(blank=True, null=True)
     rent_m_charge = models.IntegerField()
 
     class Meta:
@@ -339,8 +354,7 @@ class Service(models.Model):
     description = models.CharField(max_length=400)
     service_charge = models.IntegerField()
     s_category = models.ForeignKey('ServiceCategory', models.DO_NOTHING)
-    def __str__(self):
-        return self.service_name
+    image = models.CharField(max_length=400)
 
     class Meta:
         managed = False
@@ -349,8 +363,9 @@ class Service(models.Model):
 
 class ServiceCategory(models.Model):
     s_category_id = models.AutoField(primary_key=True)
-    service_name = models.CharField(max_length=50)
+    category_name = models.CharField(max_length=50)
     description = models.CharField(max_length=300)
+    image = models.CharField(max_length=400)
 
     class Meta:
         managed = False
@@ -380,6 +395,17 @@ class ServiceOrderDetails(models.Model):
         managed = False
         db_table = 'service_order_details'
 
+class Servicecart(models.Model):
+    scart_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(Customer, models.DO_NOTHING)
+    service = models.ForeignKey(Service, models.DO_NOTHING)
+    estimation = models.IntegerField()
+    charges = models.IntegerField()
+    description = models.CharField(max_length=400)
+
+    class Meta:
+        managed = False
+        db_table = 'servicecart'
 
 class Shade(models.Model):
     shade_id = models.AutoField(primary_key=True)

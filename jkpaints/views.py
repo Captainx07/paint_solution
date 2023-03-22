@@ -14,14 +14,33 @@ def userlogin(request):
         uname = request.POST.get("txtname")
         pwd = request.POST.get("txtpass")
         customer = Customer.objects.filter(email_id=uname,password=pwd)
-        i = 0
-        for us in customer:
-            i = i+1
-            request.session['customer'] = us.email_id
-            request.session['cid'] = us.customer_id
-            
-            return redirect("/user")
+        if customer is not None:
+            i=0
+            for us in customer:
+                i = i+1
+                request.session['customer'] = us.email_id
+                request.session['cid'] = us.customer_id
+                return redirect("/user")
+            if i == 0 :
+               return render(request, "user/clogin.html",{'error1':"Please Enter valid Email and Password"})   
     return render(request, "user/clogin.html")
+
+def register(request):
+    if request.method == "POST":
+        name= request.POST.get("txtname")
+        add= request.POST.get("txtadd")
+        cont= request.POST.get("txtcont")
+        email= request.POST.get("txtemail")
+        pass1= request.POST.get("txtpass1")
+        pass2= request.POST.get("txtpass2")
+        pin= request.POST.get("txtpincode")
+        obj = Customer(customer_name=name,address=add,contact_number=cont,email_id=email,password=pass1,
+        pin_code=pin)
+        obj.save()
+        return redirect("/user")
+    return render(request,"user/register.html")
+
+#-------------------------------product----------------------------------------------------
 
 def productlist(request):
     obj = Product.objects.all()
@@ -45,13 +64,14 @@ def addtocart(request,id):
     proddetails=ProductDetails.objects.get(product_d_id=id)
     rate=proddetails.price
     cds=Cart.objects.filter(product_d=proddetails,customer=cust,price=rate)
+    qty=request.POST.get('txtqty')
     cnt=0
     for cd in cds:
         cnt=cnt+1
-        cd.qty=cd.qty+1
+        cd.qty=cd.qty+qty 
         cd.save()
     if cnt==0:
-        cart=Cart(customer=cust,product_d=proddetails,qty=1,price=rate)
+        cart=Cart(customer=cust,product_d=proddetails,qty=qty,price=rate)
         cart.save()
     return redirect('/cart/')
 
@@ -69,16 +89,6 @@ def viewcart(request):
 def deletefromcart(request, id):
     cart = Cart.objects.get(cart_id=id)
     cart.delete()
-    return redirect("/cart")
-
-def retrivecart(request, id):
-    cart = Cart.objects.get(cart_id=id)
-    return render(request, 'user/cart.html', {'cart':cart})
-
-def cartupdate(request, id):
-    cart = Cart.objects.get(cart_id=id)
-    cart.qty=request.POST["qty"]
-    cart.save()
     return redirect("/cart")
 
 def checkout(request):
@@ -103,10 +113,169 @@ def checkout(request):
     
     for cart in carts:
         cart.delete()
-    return render(request, 'user/checkout.html',{'cart':cart})
+    return render(request, 'user/pinvoice.html')
    
 def userpage(request):
     return render(request, 'user/userindex.html')
+
+
+#----------------------------------SERVICE-----------------------------------------------
+
+def servicelist(request):
+    obj = ServiceCategory.objects.all()
+    return render(request, 'user/servicelist.html', {"ServiceCategory": obj})
+
+def servicedetailslist(request,id):
+    obj = Service.objects.filter(s_category_id=id)
+    return render(request, 'user/servicedetailslist.html', {"servicedetails":obj})
+
+def servicedetails1(request,id):
+    sdetails=Service.objects.get(service_id=id)
+    return render(request, 'user/servicedetails1.html', {"i":sdetails})
+
+def serviceaddtocart(request,id):
+    if request.session.has_key('cid'):
+        pass
+    else:
+        return redirect('/userlogin/')
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    service=Service.objects.get(service_id=id)
+    rate=service.service_charge
+    description=service.description
+    cds=Servicecart.objects.filter(customer=cust,service=service,charges=rate,description=description)
+    estimation=request.POST.get("txtedimen")
+    cnt=0
+    for cd in cds:
+        cnt=cnt+1
+        cd.estimation=cd.estimation
+        cd.save()
+    if cnt==0:
+        cart=Servicecart(customer=cust,service=service,estimation=estimation,charges=rate,description=description)
+        cart.save()
+    return redirect('/servicecart/')
+    
+def viewscart(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    cds=Servicecart.objects.filter(customer_id=cust)
+    cart1=Servicecart.objects.all()
+    total = 0
+    for i in cart1:
+        total+=i.charges*i.estimation
+        i.save()
+    return render(request,'user/servicecart.html',{'cart':cds,'total':total,'cart1':cart1})
+
+def deletefromscart(request, id):
+    cart = Servicecart.objects.get(scart_id=id)
+    cart.delete()
+    return redirect("/servicecart")
+
+
+def servicecheckout(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    carts=Servicecart.objects.filter(customer=cust)
+    total=0
+    for cart in carts:
+        total+=cart.charges*cart.estimation
+    dt=datetime.datetime.now().date()
+    so=ServiceOrder(customer=cust,order_date=dt,estimated_total=total)
+    so.save()
+    soid=ServiceOrder.objects.aggregate(Max('service_o_id'))
+    obj=ServiceOrder.objects.get(service_o_id=soid['service_o_id__max'])
+
+    for cart in carts:
+        sd=Service.objects.get(service_id=cart.service_id)
+        estimation=cart.estimation
+        rate=cart.charges
+        des=cart.description
+        sod=ServiceOrderDetails(service_o=obj,service=sd,service_charge=rate,
+        estimated_dimension=estimation,description=des)
+        sod.save()
+    
+    for cart in carts:
+        cart.delete()
+
+    return render(request, 'user/servicecheckout.html',{'cart':cart})
+
+#--------------------------------------machinerylist-------------------------------------------------
+def machinerylist(request):
+    obj = Machinery.objects.all()
+    return render(request, 'user/machinerylist.html', {"machinery": obj})
+
+def machinerydetails(request,id):
+    mdetails=Machinery.objects.get(m_id=id)
+    return render(request, 'user/machinerydetails.html', {"i":mdetails})
+
+def machaddtocart(request,id):
+    if request.session.has_key('cid'):
+        pass
+    else:
+        return redirect('/userlogin/')
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    mdetails=Machinery.objects.get(m_id=id)
+    rate=mdetails.rent_charge
+    descri=mdetails.description
+    cds=Machinerycart.objects.filter(m=mdetails,customer=cust,price=rate,description=descri)
+    reqdays=request.POST.get('txtreqd')
+    qty=request.POST.get('txtqty')
+    cnt=0
+    for cd in cds:
+        cnt=cnt+1
+        cd.qty=cd.qty+qty
+        cd.save()
+    if cnt==0:
+        cart=Machinerycart(customer=cust,m=mdetails,qty=qty,price=rate,description=descri,
+        requirement_days=reqdays)
+        cart.save()
+    return redirect('/machinerycart/')
+
+def viewmcart(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    cds=Machinerycart.objects.filter(customer=cust)
+    cart1=Machinerycart.objects.all()
+    total = 0
+    for i in cart1:
+        total+=i.price*i.qty*i.requirement_days
+        i.save()
+    return render(request,'user/machinerycart.html',{'cart':cds,'total':total,'cart1':cart1})
+
+def deletemcart(request, id):
+    cart = Machinerycart.objects.get(machcart_id=id)
+    cart.delete()
+    return redirect("/machinerycart")
+
+
+def machinerycheckout(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    carts=Machinerycart.objects.filter(customer=cust)
+    total=0
+    for cart in carts:
+        total+=cart.price*cart.qty*cart.requirement_days
+    dt=datetime.datetime.now().date()
+    ro=RentOrder(customer=cust,order_date=dt,total=total)
+    ro.save()
+    roid=RentOrder.objects.aggregate(Max('rent_o_id'))
+    obj=RentOrder.objects.get(rent_o_id=roid['rent_o_id__max'])
+
+    for cart in carts:
+        rdodd=Machinery.objects.get(m_id=cart.m_id)
+        qty=cart.qty
+        rate=cart.price
+        reqd=cart.requirement_days
+        rdes=cart.description       
+        rod=RentOrderDetails(rent_o=obj,rent_m=rdodd,rent_m_charge=rate,qty=qty,
+        description=rdes,requirement_days=reqd)
+        rod.save()
+    
+    for cart in carts:
+        cart.delete()
+
+    return render(request,'user/machinerycheckout.html',{'cart':cart})
 
 #---------------------------------------------------------------------------------------------------
 # ===================================== Admin Views =================================================
@@ -117,11 +286,14 @@ def login(request):
         uname = request.POST.get("txtname")
         pwd = request.POST.get("txtpass")
         admins = Admin.objects.filter(admin_name=uname, password=pwd)
-        i = 0
-        for ad in admins:
-            i = i+1
-            request.session['admin'] = ad.admin_name
-            return redirect("/")
+        if admins is not None:
+            i = 0
+            for ad in admins:
+                i = i+1
+                request.session['admin'] = ad.admin_name
+                return redirect("/home",{'succ':"Login succefull"})
+            if i == 0 :
+               return render(request, "login.html",{'error1':"Please Enter valid Email and Password"})   
     return render(request, "login.html")
 
 def adminpage(request):
@@ -800,9 +972,6 @@ def jobworkerupdate(request, id):
     jobworker.work_id = request.POST["work_id"]
     jobworker.save()
     return redirect("/jobworker")
-    work = Work.objects.all()
-    return render(request, 'jobworkeradd.html', {'work': work})
-
 
 def machineryshow(request):
     if request.session.has_key('admin'):
@@ -811,7 +980,6 @@ def machineryshow(request):
         return redirect('/login/')
     obj = Machinery.objects.all()
     return render(request, 'machinery.html', {"Machinery": obj})
-
 
 def machineryadd(request):
     if request.session.has_key('admin'):
@@ -861,7 +1029,7 @@ def machineryupdate(request, id):
         return redirect('/login/')
     machinery = Machinery.objects.get(m_id=id)
     machinery.m_name = request.POST.get('txtmname')
-    machinery.description = request.POST.get("txtdes")
+    machinery.description = request.POST.get("txtdecri")
     machinery.rent_charge = request.POST.get("txtrcharge")
     machinery.machinery_work = request.POST.get("txtmwrok")
 
@@ -1072,6 +1240,23 @@ def productshow(request):
         return redirect('/login/')
     obj = Product.objects.all()
     return render(request, 'product.html', {"Product": obj})
+
+def productrptshow(request):
+    if request.session.has_key('admin'):
+        pass
+    else:
+        return redirect('/login/')
+    obj = Product.objects.all()
+    return render(request, 'productrpt.html', {"Product": obj})
+
+
+def productdetailsshow2(request,id):
+    if request.session.has_key('admin'):
+        pass
+    else:
+        return redirect('/login/')
+    productdetails = ProductDetails.objects.filter(product_id=id)
+    return render(request, 'productdetailsshow2.html', {'productdetails':productdetails})
 
 
 def productadd(request):
@@ -1798,13 +1983,17 @@ def serviceadd(request):
         sname = request.POST.get("txtsname")
         descri = request.POST.get("txtdescri")
         scharge = request.POST.get("txtscharge")
-        ssub = request.POST["s_sub_id"]
+        scat = request.POST["s_category_id"]
+        upload = request.FILES['image']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
         obj = Service(service_name=sname, description=descri,
-                      service_charge=scharge, s_sub_id=ssub)
+                      service_charge=scharge, s_category_id=scat,image=file_url)
         obj.save()
         return redirect("/service")
-    sscategory = ServiceCategory.objects.all()
-    return render(request, 'serviceadd.html', {'sscategory': sscategory})
+    scategory = ServiceCategory.objects.all()
+    return render(request, 'serviceadd.html', {'scategory': scategory})
 
 
 def servicedelete(request, id):
@@ -1823,8 +2012,8 @@ def serviceedit(request, id):
     else:
         return redirect('/login/')
     service = Service.objects.get(service_id=id)
-    sscategory = ServiceCategory.objects.all()
-    return render(request, 'serviceedit.html', {"service": service, "sscategory": sscategory})
+    scategory = ServiceCategory.objects.all()
+    return render(request, 'serviceedit.html', {"service": service, "scategory": scategory})
 
 
 def serviceupdate(request, id):
@@ -1836,9 +2025,17 @@ def serviceupdate(request, id):
     service.service_name = request.POST.get("txtsname")
     service.description = request.POST.get("txtdescri")
     service.service_charge = request.POST.get("txtscharge")
-    service.s_sub_id = request.POST["s_sub_id"]
+    service.s_category_id = request.POST["s_category_id"]
+    upload = request.FILES['image']
+    fss = FileSystemStorage()
+    file = fss.save(upload.name, upload)
+    file_url = fss.url(file)
+    service.image=file_url
     service.save()
     return redirect("/service")
+    scategory = ServiceCategory.objects.all()
+    return render(request, 'serviceadd.html', {'scategory': scategory})
+
 
 def servicecategoryshow(request):
     if request.session.has_key('admin'):
@@ -1857,7 +2054,11 @@ def servicecategoryadd(request):
     if request.method == "POST":
         scname = request.POST.get("txtscname")
         descri = request.POST.get("txtdescri")
-        obj = ServiceCategory(service_name=scname, description=descri)
+        upload = request.FILES['image']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
+        obj = ServiceCategory(category_name=scname, description=descri,image=file_url)
         obj.save()
         return redirect("/servicecategory")
     return render(request, 'servicecategoryadd.html')
@@ -1888,8 +2089,13 @@ def servicecategoryupdate(request, id):
     else:
         return redirect('/login/')
     servicecategory = ServiceCategory.objects.get(s_category_id=id)
-    servicecategory.service_name = request.POST.get('txtscname')
+    servicecategory.category_name = request.POST.get('txtscname')
     servicecategory.description = request.POST.get("txtdescri")
+    upload = request.FILES['image']
+    fss = FileSystemStorage()
+    file = fss.save(upload.name, upload)
+    file_url = fss.url(file)
+    servicecategory.image=file_url
     servicecategory.save()
     return redirect("/servicecategory")
 
