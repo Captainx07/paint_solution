@@ -240,7 +240,8 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
-
+    <form method="post" action="/addtocart/{{i.product_d_id}}/">
+        {% csrf_token %}
      <!-- Product Details Section Begin -->
      <section class="product-details spad">
         <div class="container">
@@ -249,7 +250,7 @@
                     <div class="product__details__pic">
                         <div class="product__details__pic__item">
                             <img class="product__details__pic__item--large"
-                                src="{{i.product.image}}" alt="">
+                                src="{{i.product.image}}" alt="" width="80px" height="400px">
                         </div>
                     </div>
                 </div>
@@ -269,11 +270,11 @@
                         <div class="product__details__quantity">
                             <div class="quantity">
                                 <div class="pro-qty">
-                                    <input type="text" value="1">
+                                    <input type="text" name="txtqty" value="1">
                                 </div>
                             </div>
                         </div>
-                        <a href="/addtocart/{{i.product_d_id}}/" class="primary-btn">ADD TO CART</a>
+                        <button type="submit" class="primary-btn">ADD TO CART</button>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b> <span>In Stock</span></li>
@@ -362,6 +363,7 @@
             </div>
         </div>
     </section>
+    </form>
     <!-- Product Details Section End -->
 
     <!-- Related Product Section Begin -->

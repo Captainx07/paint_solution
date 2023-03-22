@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 import os
+import datetime
 
 from .models import *
-
+from django.db.models import Max
 #---------------------------------------------------------------------------------------------------
 # ===================================== User Views =================================================
 #---------------------------------------------------------------------------------------------------
@@ -13,14 +14,33 @@ def userlogin(request):
         uname = request.POST.get("txtname")
         pwd = request.POST.get("txtpass")
         customer = Customer.objects.filter(email_id=uname,password=pwd)
-        i = 0
-        for us in customer:
-            i = i+1
-            request.session['customer'] = us.email_id
-            request.session['cid'] = us.customer_id
-            
-            return redirect("/user")
+        if customer is not None:
+            i=0
+            for us in customer:
+                i = i+1
+                request.session['customer'] = us.email_id
+                request.session['cid'] = us.customer_id
+                return redirect("/user")
+            if i == 0 :
+               return render(request, "user/clogin.html",{'error1':"Please Enter valid Email and Password"})   
     return render(request, "user/clogin.html")
+
+def register(request):
+    if request.method == "POST":
+        name= request.POST.get("txtname")
+        add= request.POST.get("txtadd")
+        cont= request.POST.get("txtcont")
+        email= request.POST.get("txtemail")
+        pass1= request.POST.get("txtpass1")
+        pass2= request.POST.get("txtpass2")
+        pin= request.POST.get("txtpincode")
+        obj = Customer(customer_name=name,address=add,contact_number=cont,email_id=email,password=pass1,
+        pin_code=pin)
+        obj.save()
+        return redirect("/user")
+    return render(request,"user/register.html")
+
+#-------------------------------product----------------------------------------------------
 
 def productlist(request):
     obj = Product.objects.all()
@@ -44,13 +64,14 @@ def addtocart(request,id):
     proddetails=ProductDetails.objects.get(product_d_id=id)
     rate=proddetails.price
     cds=Cart.objects.filter(product_d=proddetails,customer=cust,price=rate)
+    qty=request.POST.get('txtqty')
     cnt=0
     for cd in cds:
         cnt=cnt+1
-        cd.qty=cd.qty+1
+        cd.qty=cd.qty+qty 
         cd.save()
     if cnt==0:
-        cart=Cart(customer=cust,product_d=proddetails,qty=1)
+        cart=Cart(customer=cust,product_d=proddetails,qty=qty,price=rate)
         cart.save()
     return redirect('/cart/')
 
@@ -58,10 +79,203 @@ def viewcart(request):
     cid=request.session['cid']
     cust=Customer.objects.get(customer_id=cid)
     cds=Cart.objects.filter(customer=cust)
-    return render(request,'user/cart.html',{'proddetails':cds})
+    cart1=Cart.objects.all()
+    total = 0
+    for i in cart1:
+        total+=i.price*i.qty
+        i.save()
+    return render(request,'user/cart.html',{'cart':cds,'total':total,'cart1':cart1})
+
+def deletefromcart(request, id):
+    cart = Cart.objects.get(cart_id=id)
+    cart.delete()
+    return redirect("/cart")
+
+def checkout(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    carts=Cart.objects.filter(customer=cust)
+    total=0
+    for cart in carts:
+        total+=cart.price*cart.qty
+    dt=datetime.datetime.now().date()
+    po=ProductOrder(customer=cust,date=dt,total=total,shipping_handling=100)
+    po.save()
+    poid=ProductOrder.objects.aggregate(Max('product_o_id'))
+    poobj=ProductOrder.objects.get(product_o_id=poid['product_o_id__max'])
+
+    for cart in carts:
+        prdodd=ProductDetails.objects.get(product_d_id=cart.product_d_id)
+        qty=cart.qty
+        rate=cart.price
+        pod=ProductOrderDetails(product_o=poobj,product_d=prdodd,price=rate,qty=qty)
+        pod.save()
     
+    for cart in carts:
+        cart.delete()
+    return render(request, 'user/pinvoice.html')
+   
 def userpage(request):
     return render(request, 'user/userindex.html')
+
+
+#----------------------------------SERVICE-----------------------------------------------
+
+def servicelist(request):
+    obj = ServiceCategory.objects.all()
+    return render(request, 'user/servicelist.html', {"ServiceCategory": obj})
+
+def servicedetailslist(request,id):
+    obj = Service.objects.filter(s_category_id=id)
+    return render(request, 'user/servicedetailslist.html', {"servicedetails":obj})
+
+def servicedetails1(request,id):
+    sdetails=Service.objects.get(service_id=id)
+    return render(request, 'user/servicedetails1.html', {"i":sdetails})
+
+def serviceaddtocart(request,id):
+    if request.session.has_key('cid'):
+        pass
+    else:
+        return redirect('/userlogin/')
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    service=Service.objects.get(service_id=id)
+    rate=service.service_charge
+    description=service.description
+    cds=Servicecart.objects.filter(customer=cust,service=service,charges=rate,description=description)
+    estimation=request.POST.get("txtedimen")
+    cnt=0
+    for cd in cds:
+        cnt=cnt+1
+        cd.estimation=cd.estimation
+        cd.save()
+    if cnt==0:
+        cart=Servicecart(customer=cust,service=service,estimation=estimation,charges=rate,description=description)
+        cart.save()
+    return redirect('/servicecart/')
+    
+def viewscart(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    cds=Servicecart.objects.filter(customer_id=cust)
+    cart1=Servicecart.objects.all()
+    total = 0
+    for i in cart1:
+        total+=i.charges*i.estimation
+        i.save()
+    return render(request,'user/servicecart.html',{'cart':cds,'total':total,'cart1':cart1})
+
+def deletefromscart(request, id):
+    cart = Servicecart.objects.get(scart_id=id)
+    cart.delete()
+    return redirect("/servicecart")
+
+
+def servicecheckout(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    carts=Servicecart.objects.filter(customer=cust)
+    total=0
+    for cart in carts:
+        total+=cart.charges*cart.estimation
+    dt=datetime.datetime.now().date()
+    so=ServiceOrder(customer=cust,order_date=dt,estimated_total=total)
+    so.save()
+    soid=ServiceOrder.objects.aggregate(Max('service_o_id'))
+    obj=ServiceOrder.objects.get(service_o_id=soid['service_o_id__max'])
+
+    for cart in carts:
+        sd=Service.objects.get(service_id=cart.service_id)
+        estimation=cart.estimation
+        rate=cart.charges
+        des=cart.description
+        sod=ServiceOrderDetails(service_o=obj,service=sd,service_charge=rate,
+        estimated_dimension=estimation,description=des)
+        sod.save()
+    
+    for cart in carts:
+        cart.delete()
+
+    return render(request, 'user/servicecheckout.html',{'cart':cart})
+
+#--------------------------------------machinerylist-------------------------------------------------
+def machinerylist(request):
+    obj = Machinery.objects.all()
+    return render(request, 'user/machinerylist.html', {"machinery": obj})
+
+def machinerydetails(request,id):
+    mdetails=Machinery.objects.get(m_id=id)
+    return render(request, 'user/machinerydetails.html', {"i":mdetails})
+
+def machaddtocart(request,id):
+    if request.session.has_key('cid'):
+        pass
+    else:
+        return redirect('/userlogin/')
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    mdetails=Machinery.objects.get(m_id=id)
+    rate=mdetails.rent_charge
+    descri=mdetails.description
+    cds=Machinerycart.objects.filter(m=mdetails,customer=cust,price=rate,description=descri)
+    reqdays=request.POST.get('txtreqd')
+    qty=request.POST.get('txtqty')
+    cnt=0
+    for cd in cds:
+        cnt=cnt+1
+        cd.qty=cd.qty+qty
+        cd.save()
+    if cnt==0:
+        cart=Machinerycart(customer=cust,m=mdetails,qty=qty,price=rate,description=descri,
+        requirement_days=reqdays)
+        cart.save()
+    return redirect('/machinerycart/')
+
+def viewmcart(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    cds=Machinerycart.objects.filter(customer=cust)
+    cart1=Machinerycart.objects.all()
+    total = 0
+    for i in cart1:
+        total+=i.price*i.qty*i.requirement_days
+        i.save()
+    return render(request,'user/machinerycart.html',{'cart':cds,'total':total,'cart1':cart1})
+
+def deletemcart(request, id):
+    cart = Machinerycart.objects.get(machcart_id=id)
+    cart.delete()
+    return redirect("/machinerycart")
+
+
+def machinerycheckout(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    carts=Machinerycart.objects.filter(customer=cust)
+    total=0
+    for cart in carts:
+        total+=cart.price*cart.qty*cart.requirement_days
+    dt=datetime.datetime.now().date()
+    ro=RentOrder(customer=cust,order_date=dt,total=total)
+    ro.save()
+    roid=RentOrder.objects.aggregate(Max('rent_o_id'))
+    obj=RentOrder.objects.get(rent_o_id=roid['rent_o_id__max'])
+
+    for cart in carts:
+        rdodd=Machinery.objects.get(m_id=cart.m_id)
+        qty=cart.qty
+        rate=cart.price
+        reqd=cart.requirement_days
+        rdes=cart.description       
+        rod=RentOrderDetails(rent_o=obj,rent_m=rdodd,rent_m_charge=rate,qty=qty,
+        description=rdes,requirement_days=reqd)
+        rod.save()
+    
+    for cart in carts:
+        cart.delete()
+
+    return render(request,'user/machinerycheckout.html',{'cart':cart})
 
 #---------------------------------------------------------------------------------------------------
 # ===================================== Admin Views =================================================
@@ -72,11 +286,14 @@ def login(request):
         uname = request.POST.get("txtname")
         pwd = request.POST.get("txtpass")
         admins = Admin.objects.filter(admin_name=uname, password=pwd)
-        i = 0
-        for ad in admins:
-            i = i+1
-            request.session['admin'] = ad.admin_name
-            return redirect("/")
+        if admins is not None:
+            i = 0
+            for ad in admins:
+                i = i+1
+                request.session['admin'] = ad.admin_name
+                return redirect("/home",{'succ':"Login succefull"})
+            if i == 0 :
+               return render(request, "login.html",{'error1':"Please Enter valid Email and Password"})   
     return render(request, "login.html")
 
 def adminpage(request):
@@ -118,7 +335,6 @@ def admindelete(request, id):
     aid = Admin.objects.get(admin_id=id)
     aid.delete()
     return redirect("/admin")
-
 
 def adminedit(request, id):
     admin = Admin.objects.get(admin_id=id)
@@ -193,8 +409,6 @@ def areaupdate(request, id):
     area.city_id = request.POST["city_id"]
     area.save()
     return redirect("/area")
-    city = City.objects.all()
-    return render(request, 'areaadd.html', {'city': city})
 
 
 def brandshow(request):
@@ -303,9 +517,7 @@ def cityupdate(request, id):
     city.state_id = request.POST["state_id"]
     city.save()
     return redirect("/city")
-    state = State.objects.all()
-    return render(request, 'stateadd.html', {'state': state})
-
+    
 
 def customershow(request):
     if request.session.has_key('admin'):
@@ -329,12 +541,16 @@ def customeradd(request):
         cuspass = request.POST.get("txtcuspass")
         pincode = request.POST["pin_code"]
         pin = Area.objects.get(pin_code=pincode)
-        upload = request.FILES['image']
-        fss = FileSystemStorage()
-        file = fss.save(upload.name, upload)
-        file_url = fss.url(file)
-        obj = Customer(customer_name=cusname, address=cusadd, contact_number=cuscon,
+        if len(request.FILES)>0:
+            upload = request.FILES['image']
+            fss = FileSystemStorage()
+            file = fss.save(upload.name, upload)
+            file_url = fss.url(file)
+            obj = Customer(customer_name=cusname, address=cusadd, contact_number=cuscon,
                        email_id=cusemail, password=cuspass, pin_code=pin, image=file_url)
+        else:
+            obj = Customer(customer_name=cusname, address=cusadd, contact_number=cuscon,
+                       email_id=cusemail, password=cuspass, pin_code=pin)
         obj.save()
         return redirect("/customer")
     area = Area.objects.all()
@@ -372,15 +588,19 @@ def customerupdate(request, id):
     pin_code = request.POST["pin_code"]
     pin = Area.objects.get(pin_code=pin_code)
     customer.pin_code = pin
-    image=request.FILES['image']
-    fss=FileSystemStorage()
-    file=fss.save(image.name,image)
-    fp=fss.url(file)
-    customer.image=fp
+    oldurl=request.POST.get("oldurl")
+    if len(request.FILES)>0:
+        image=request.FILES['image']
+        fss=FileSystemStorage()
+        file=fss.save(image.name,image)
+        fp=fss.url(file)
+        customer.image=fp
+        
+    else:
+        customer.image=oldurl
+        
     customer.save()
     return redirect("/customer")
-    area = Area.objects.all()
-    return render(request, 'customeradd.html', {'area': area})
 
 
 def finishshow(request):
@@ -560,11 +780,6 @@ def invoiceupdate(request, id):
     invoice.rent_od_id = rentod
     invoice.save()
     return redirect("/invoice")
-    customer = Customer.objects.all()
-    serviceod = ServiceOrderDetails.objects.all()
-    rentod = RentOrderDetails.objects.all()
-    return render(request, 'invoiceadd.html', {'customer': customer, 'serviceod': serviceod, 'rentod': rentod})
-
 
 def invoicerentshow(request):
     if request.session.has_key('admin'):
@@ -627,10 +842,6 @@ def invoicerentupdate(request, id):
     invoicerent.rent_charge = request.POST.get("txtchare")
     invoicerent.save()
     return redirect("/invoicerent")
-    invoice = Invoice.objects.all()
-    machinery = Machinery.objects.all()
-    return render(request, 'invoicerentadd.html', {'invoice': invoice, 'machinery': machinery})
-
 
 def invoiceserviceshow(request):
     if request.session.has_key('admin'):
@@ -647,14 +858,14 @@ def invoiceserviceadd(request):
             pass
     else:
         return redirect('/login/')
-        invoice = request.POST["invoice_id"]
-        service = request.POST["service_id"]
-        dimension = request.POST.get("txtdime")
-        charge = request.POST.get("txtchare")
-        obj = InvoiceService(invoice_id=invoice, service_id=service,
-                             dimension=dimension, service_charge=charge)
-        obj.save()
-        return redirect("/invoiceservice")
+    invoice = request.POST["invoice_id"]
+    service = request.POST["service_id"]
+    dimension = request.POST.get("txtdime")
+    charge = request.POST.get("txtchare")
+    obj = InvoiceService(invoice_id=invoice, service_id=service,
+                         dimension=dimension, service_charge=charge)
+    obj.save()
+    return redirect("/invoiceservice")
     invoice = Invoice.objects.all()
     service = Service.objects.all()
     return render(request, 'invoiceserviceadd.html', {'invoice': invoice, 'service': service})
@@ -761,9 +972,6 @@ def jobworkerupdate(request, id):
     jobworker.work_id = request.POST["work_id"]
     jobworker.save()
     return redirect("/jobworker")
-    work = Work.objects.all()
-    return render(request, 'jobworkeradd.html', {'work': work})
-
 
 def machineryshow(request):
     if request.session.has_key('admin'):
@@ -772,7 +980,6 @@ def machineryshow(request):
         return redirect('/login/')
     obj = Machinery.objects.all()
     return render(request, 'machinery.html', {"Machinery": obj})
-
 
 def machineryadd(request):
     if request.session.has_key('admin'):
@@ -822,7 +1029,7 @@ def machineryupdate(request, id):
         return redirect('/login/')
     machinery = Machinery.objects.get(m_id=id)
     machinery.m_name = request.POST.get('txtmname')
-    machinery.description = request.POST.get("txtdes")
+    machinery.description = request.POST.get("txtdecri")
     machinery.rent_charge = request.POST.get("txtrcharge")
     machinery.machinery_work = request.POST.get("txtmwrok")
 
@@ -1025,9 +1232,6 @@ def paymentupdate(request, id):
     payment.amount = request.POST.get("txtamount")
     payment.save()
     return redirect("/payment")
-    invoice = Invoice.objects.all()
-    return render(request, 'paymentadd.html', {'invoice': invoice})
-
 
 def productshow(request):
     if request.session.has_key('admin'):
@@ -1036,6 +1240,23 @@ def productshow(request):
         return redirect('/login/')
     obj = Product.objects.all()
     return render(request, 'product.html', {"Product": obj})
+
+def productrptshow(request):
+    if request.session.has_key('admin'):
+        pass
+    else:
+        return redirect('/login/')
+    obj = Product.objects.all()
+    return render(request, 'productrpt.html', {"Product": obj})
+
+
+def productdetailsshow2(request,id):
+    if request.session.has_key('admin'):
+        pass
+    else:
+        return redirect('/login/')
+    productdetails = ProductDetails.objects.filter(product_id=id)
+    return render(request, 'productdetailsshow2.html', {'productdetails':productdetails})
 
 
 def productadd(request):
@@ -1157,15 +1378,7 @@ def productupdate(request, id):
         file_url = fss.url(file)
         product.image=file_url
     product.save()
-
     return redirect("/product")
-    brand = Brand.objects.all()
-    pcategory = PCategory.objects.all()
-    ptype = Ptype.objects.all()
-    pform = Form.objects.all()
-    pfinish = Finish.objects.all()
-    return render(request, 'productadd.html',
-                  {'brand': brand, 'pcategory': pcategory, 'ptype': ptype, 'pform': pform, 'pfinish': pfinish})
 
 
 def productdetailsshow(request):
@@ -1232,12 +1445,6 @@ def productdetailsupdate(request, id):
     productdetails.product_id = request.POST["product_id"]
     productdetails.save()
     return redirect("/productdetails")
-    product = Product.objects.all()
-    size = Size.objects.all()
-    shade = Shade.objects.all()
-    return render(request, 'productdetailsadd.html',
-                  {'size': size, 'shade': shade, 'product': product})
-
 
 def productordershow(request):
     if request.session.has_key('admin'):
@@ -1321,9 +1528,6 @@ def productorderupdate(request, id):
     productorder.track_no=track_no
     productorder.save()
     return redirect("/productorder")
-    customer = Customer.objects.all()
-    offer = Offer.objects.all()
-    return render(request, 'productorderadd.html', {'customer': customer, 'offer': offer})
 
 
 def productorderdetailsshow(request):
@@ -1345,9 +1549,8 @@ def productorderdetailsadd(request):
         productdetails = request.POST["product_d_id"]
         price = request.POST.get("txtprice")
         qty = request.POST.get("txtqty")
-        discription = request.POST.get("txtdis")
         obj = ProductOrderDetails(
-            product_o_id=productorder, product_d_id=productdetails, price=price, qty=qty, description=discription)
+            product_o_id=productorder, product_d_id=productdetails, price=price, qty=qty)
         obj.save()
         return redirect("/productorderdetails")
     product = ProductOrder.objects.all()
@@ -1387,13 +1590,9 @@ def productorderdetailsupdate(request, id):
     productorderdetails.productdetails_id = request.POST["product_d_id"]
     productorderdetails.price = request.POST.get("txtprice")
     productorderdetails.qty = request.POST.get("txtqty")
-    productorderdetails.description = request.POST.get("txtdis")
     productorderdetails.save()
     return redirect("/productorderdetails")
-    product = ProductOrder.objects.all()
-    productdetails = ProductDetails.objects.all()
-    return render(request, 'productorderdetails.add', {'product': product, 'productdetails': productdetails})
-
+ 
 
 def ptypeshow(request):
     if request.session.has_key('admin'):
@@ -1506,9 +1705,7 @@ def purchaseorderupdate(request, id):
     purchaseorder.shipping_handling = request.POST.get("txtshipping")
     purchaseorder.save()
     return redirect("/purchaseorder")
-    supplier = Supplier.objects.all()
-    return render(request, 'purchaseorderadd.html', {'supplier': supplier})
-
+ 
 
 def purchaseorderdetailsshow(request):
     if request.session.has_key('admin'):
@@ -1574,11 +1771,7 @@ def purchaseorderdetailsupdate(request, id):
     purchaseorderdetails.description = request.POST.get("txtdis")
     purchaseorderdetails.save()
     return redirect("/productorderdetails")
-    puo = PurchaseOrder.objects.all()
-    productdetails = ProductDetails.objects.all()
-    return render(request, 'purchaseorderdetailsadd.html', {'puo': puo, 'productdetails': productdetails})
-
-
+  
 def rentordershow(request):
     if request.session.has_key('admin'):
         pass
@@ -1705,10 +1898,7 @@ def rentorderdetailsupdate(request, id):
     rentorderdetails.rent_m_charge = request.POST.get("txtprice")
     rentorderdetails.save()
     return redirect("/rentorderdetails")
-    rentoder = RentOrder.objects.all()
-    machorder = Machinery.objects.all()
-    return render(request, 'rentorderdetailsadd.html', {'rentoder': rentoder, 'machorder': machorder})
-
+  
 
 def schedulingshow(request):
     if request.session.has_key('admin'):
@@ -1773,10 +1963,6 @@ def schedulingupdate(request, id):
     scheduling.instruction = request.POST.get("txtins")
     scheduling.status = request.POST.get("txtstatus")
     return redirect("/scheduling")
-    jobworker = JobWorker.objects.all()
-    serviceorder = ServiceOrder.objects.all()
-    return render(request, 'schedulingadd.html', {"scheduling": scheduling, "jobworker": jobworker,
-                                                  "serviceorder": serviceorder})
 
 
 def serviceshow(request):
@@ -1797,13 +1983,17 @@ def serviceadd(request):
         sname = request.POST.get("txtsname")
         descri = request.POST.get("txtdescri")
         scharge = request.POST.get("txtscharge")
-        ssub = request.POST["s_sub_id"]
+        scat = request.POST["s_category_id"]
+        upload = request.FILES['image']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
         obj = Service(service_name=sname, description=descri,
-                      service_charge=scharge, s_sub_id=ssub)
+                      service_charge=scharge, s_category_id=scat,image=file_url)
         obj.save()
         return redirect("/service")
-    sscategory = ServiceCategory.objects.all()
-    return render(request, 'serviceadd.html', {'sscategory': sscategory})
+    scategory = ServiceCategory.objects.all()
+    return render(request, 'serviceadd.html', {'scategory': scategory})
 
 
 def servicedelete(request, id):
@@ -1822,8 +2012,8 @@ def serviceedit(request, id):
     else:
         return redirect('/login/')
     service = Service.objects.get(service_id=id)
-    sscategory = ServiceCategory.objects.all()
-    return render(request, 'serviceedit.html', {"service": service, "sscategory": sscategory})
+    scategory = ServiceCategory.objects.all()
+    return render(request, 'serviceedit.html', {"service": service, "scategory": scategory})
 
 
 def serviceupdate(request, id):
@@ -1835,11 +2025,16 @@ def serviceupdate(request, id):
     service.service_name = request.POST.get("txtsname")
     service.description = request.POST.get("txtdescri")
     service.service_charge = request.POST.get("txtscharge")
-    service.s_sub_id = request.POST["s_sub_id"]
+    service.s_category_id = request.POST["s_category_id"]
+    upload = request.FILES['image']
+    fss = FileSystemStorage()
+    file = fss.save(upload.name, upload)
+    file_url = fss.url(file)
+    service.image=file_url
     service.save()
     return redirect("/service")
-    sscategory = ServiceSubCategory.objects.all()
-    return render(request, 'serviceadd.html', {'sscategory': sscategory})
+    scategory = ServiceCategory.objects.all()
+    return render(request, 'serviceadd.html', {'scategory': scategory})
 
 
 def servicecategoryshow(request):
@@ -1859,7 +2054,11 @@ def servicecategoryadd(request):
     if request.method == "POST":
         scname = request.POST.get("txtscname")
         descri = request.POST.get("txtdescri")
-        obj = ServiceCategory(service_name=scname, description=descri)
+        upload = request.FILES['image']
+        fss = FileSystemStorage()
+        file = fss.save(upload.name, upload)
+        file_url = fss.url(file)
+        obj = ServiceCategory(category_name=scname, description=descri,image=file_url)
         obj.save()
         return redirect("/servicecategory")
     return render(request, 'servicecategoryadd.html')
@@ -1890,8 +2089,13 @@ def servicecategoryupdate(request, id):
     else:
         return redirect('/login/')
     servicecategory = ServiceCategory.objects.get(s_category_id=id)
-    servicecategory.service_name = request.POST.get('txtscname')
+    servicecategory.category_name = request.POST.get('txtscname')
     servicecategory.description = request.POST.get("txtdescri")
+    upload = request.FILES['image']
+    fss = FileSystemStorage()
+    file = fss.save(upload.name, upload)
+    file_url = fss.url(file)
+    servicecategory.image=file_url
     servicecategory.save()
     return redirect("/servicecategory")
 
@@ -1953,9 +2157,6 @@ def serviceorderupdate(request, id):
     serviceorder.estimated_total = request.POST.get("txttotal")
     serviceorder.save()
     return redirect("/serviceorder")
-    customer = Customer.objects.all()
-    return render(request, 'serviceorderadd.html', {'customer': customer})
-
 
 def serviceorderdetailsshow(request):
     if request.session.has_key('admin'):
@@ -2021,10 +2222,7 @@ def serviceorderdetailsupdate(request, id):
     serviceorderdetails.service_charge = request.POST.get("txtprice")
     serviceorderdetails.save()
     return redirect("/serviceorderdetails")
-    serviceorder = ServiceOrder.objects.all()
-    service = Service.objects.all()
-    return render(request, 'serviceorderdetailsadd.html', {'serviceorder': serviceorder, 'service': service})
-
+ 
 def shadeshow(request):
     if request.session.has_key('admin'):
         pass
@@ -2131,10 +2329,7 @@ def sizeupdate(request, id):
     size.unit_id = request.POST["unit_id"]
     size.save()
     return redirect("/size")
-    unit = Unit.objects.all()
-    return render(request, 'sizeadd.html', {'unit': unit})
-
-
+  
 def stateshow(request):
     if request.session.has_key('admin'):
         pass
@@ -2246,10 +2441,7 @@ def stockupdate(request, id):
     stock.total_type = request.POST.get("txtdt")
     stock.save()
     return redirect("/stock")
-    product = Product.objects.all()
-    return render(request, 'stockadd.html', {'product': product})
-
-
+ 
 def suppliershow(request):
     if request.session.has_key('admin'):
         pass

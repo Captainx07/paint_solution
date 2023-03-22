@@ -27,17 +27,38 @@ urlpatterns = [
     path('userlogin/',views.userlogin),
     path('user/',views.userpage),
 
+    path('register/',views.register),
+#-------------------------------------------product-------------------------------------------------
     path('productlist/',views.productlist),
     path('productdetailslist/<int:id>/',views.productdetailslist),
     path('productdetails1/<int:id>/', views.productdetails1),
     path('addtocart/<int:id>/', views.addtocart),
-    path('cart/', views.viewcart),
+    path('deletefromcart/<int:id>/', views.deletefromcart),
+    path('cart/',views.viewcart),
 
 
+#----------------------------------------service-------------------------------------------
 
+    path('servicelist/',views.servicelist),
+    path('servicedetailslist/<int:id>/',views.servicedetailslist),
+    path('servicedetails1/<int:id>/',views.servicedetails1),
+    path('serviceaddtocart/<int:id>/', views.serviceaddtocart),
+    path('deletefromscart/<int:id>/', views.deletefromscart),
+   
+    path('servicecart/',views.viewscart),
+    path('servicecheckout/',views.servicecheckout), 
 
+    path('checkout/',views.checkout),
 
+#-----------------------------------------machinery------------------------------------------------
 
+    path('machinerylist/',views.machinerylist),
+    path('machinerydetails/<int:id>/',views.machinerydetails),
+    path('machaddtocart/<int:id>/', views.machaddtocart),
+    path('deletemcart/<int:id>/', views.deletemcart),
+    path('machinerycart/',views.viewmcart),
+
+    path('machinerycheckout/',views.machinerycheckout),
 
 
 #---------------------------------------------------------------------------------------------------
@@ -142,10 +163,14 @@ urlpatterns = [
     path('paymentupdate/<int:id>/', views.paymentupdate),
 
     path('product/',views.productshow),
+    path('productrpt/',views.productrptshow),
     path('productadd/', views.productadd),
     path('productdelete/<int:id>/', views.productdelete),
     path('productedit/<int:id>/', views.productedit),
     path('productupdate/<int:id>/', views.productupdate),
+
+
+    path('productdetailsshow2/<int:id>/',views.productdetailsshow2),
  
     path('productdetails/',views.productdetailsshow),
     path('productdetailsadd/', views.productdetailsadd),

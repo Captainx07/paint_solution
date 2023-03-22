@@ -5,7 +5,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Order Details </h6>
+            <h6 class="modal-title font-weight-bold text-center text-white bg-gradient-primary">Product Order Details
+            </h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -27,29 +28,22 @@
                             {% endfor %}
                         </select>
                     </div>
-
                     <div class="form-group">
-                        <label for="Description">Description</label>
-                        <input type="text" class="form-control" id="Description" placeholder="Enter Description"
-                            name="txtdis" required>
+                        <label for="Quentity">Quentity</label>
+                        <input type="number" class="form-control" id="Quentity" placeholder="Enter Quentity"
+                            name="txtqty" required>
                     </div>
-
+                    <div class="form-group">
+                        <label for="Price">Price</label>
+                        <input type="number" class="form-control" id="Price" placeholder="Enter Price" name="txtprice"
+                            required>
+                    </div><br>
+                    <button type="submit" class="btn  bg-gradient-primary text-white">Add</button>
+                    <button class="btn btn-light">Cancel</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="Quentity">Quentity</label>
-                <input type="number" class="form-control" id="Quentity" placeholder="Enter Quentity" name="txtqty"
-                    required>
-            </div>
-            <div class="form-group">
-                <label for="Price">Price</label>
-                <input type="number" class="form-control" id="Price" placeholder="Enter Price" name="txtprice" required>
-            </div><br>
-            <button type="submit" class="btn  bg-gradient-primary text-white">Add</button>
-            <button class="btn btn-light">Cancel</button>
-            </form>
         </div>
     </div>
-</div>
 </div>
 </div>
 
