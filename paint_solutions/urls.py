@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('userlogin/',views.userlogin),
     path('user/',views.userpage),
+    path('userprofile/',views.userprofile),
 
     path('register/',views.register),
 #-------------------------------------------product-------------------------------------------------
@@ -35,6 +36,9 @@ urlpatterns = [
     path('addtocart/<int:id>/', views.addtocart),
     path('deletefromcart/<int:id>/', views.deletefromcart),
     path('cart/',views.viewcart),
+    path('checkout/',views.checkout),
+    path('pinvoice/<int:id>/',views.pinvoice),
+    path('estimation/',views.estimation),
 
 
 #----------------------------------------service-------------------------------------------
@@ -44,11 +48,10 @@ urlpatterns = [
     path('servicedetails1/<int:id>/',views.servicedetails1),
     path('serviceaddtocart/<int:id>/', views.serviceaddtocart),
     path('deletefromscart/<int:id>/', views.deletefromscart),
-   
+    path('sinvoice/<int:id>/',views.sinvoice),
     path('servicecart/',views.viewscart),
     path('servicecheckout/',views.servicecheckout), 
 
-    path('checkout/',views.checkout),
 
 #-----------------------------------------machinery------------------------------------------------
 
@@ -57,7 +60,7 @@ urlpatterns = [
     path('machaddtocart/<int:id>/', views.machaddtocart),
     path('deletemcart/<int:id>/', views.deletemcart),
     path('machinerycart/',views.viewmcart),
-
+    path('rinvoice/<int:id>/',views.rinvoice),  
     path('machinerycheckout/',views.machinerycheckout),
 
 

@@ -9,6 +9,17 @@ from django.db.models import Max
 # ===================================== User Views =================================================
 #---------------------------------------------------------------------------------------------------
 
+def userpage(request):
+    return render(request, 'user/userindex.html')
+
+def userprofile(request):
+    cid=request.session['cid']
+    cust=Customer.objects.get(customer_id=cid)
+    order=ProductOrder.objects.filter(customer=cust)
+    order1=ServiceOrder.objects.filter(customer=cust)
+    order2=RentOrder.objects.filter(customer=cust)
+    return render(request, 'user/userprofile.html',{'order':order,'order1':order1,'order2':order2})
+
 def userlogin(request):
     if request.method == "POST":
         uname = request.POST.get("txtname")
@@ -33,12 +44,25 @@ def register(request):
         email= request.POST.get("txtemail")
         pass1= request.POST.get("txtpass1")
         pass2= request.POST.get("txtpass2")
-        pin= request.POST.get("txtpincode")
-        obj = Customer(customer_name=name,address=add,contact_number=cont,email_id=email,password=pass1,
-        pin_code=pin)
-        obj.save()
-        return redirect("/user")
-    return render(request,"user/register.html")
+        pin_code=request.POST.get("pin_code")
+        if pass1 == pass2:
+            e=Customer.objects.filter(email_id=email)
+            i=0
+            for j in e:
+                i=i+1
+            if i<=0:
+                c=Area.objects.get(pin_code=pin_code)
+                obj = Customer(customer_name=name,address=add,contact_number=cont,email_id=email,password=pass1,pin_code=c)
+                obj.save()
+                return redirect("/userlogin/")
+            else:
+                area = Area.objects.all()
+                return render(request,"user/register.html",{"area":area,'error':"Email Adress is match"})
+        else:
+            area = Area.objects.all()
+            return render(request,"user/register.html",{"area":area,'error':"Password Must Match"}) 
+    area = Area.objects.all()
+    return render(request,"user/register.html",{"area":area})
 
 #-------------------------------product----------------------------------------------------
 
@@ -113,10 +137,22 @@ def checkout(request):
     
     for cart in carts:
         cart.delete()
-    return render(request, 'user/pinvoice.html')
+    return redirect("/userprofile/")
    
-def userpage(request):
-    return render(request, 'user/userindex.html')
+def pinvoice(request,id):
+    obj=ProductOrder.objects.get(product_o_id=id)
+    obj2=ProductOrderDetails.objects.filter(product_o=obj)
+    return render(request, 'user/pinvoice.html',{'obj2':obj2,'obj':obj})
+
+def sinvoice(request,id):
+    obj=ServiceOrder.objects.get(service_o_id=id)
+    obj2=ServiceOrderDetails.objects.filter(service_o=obj)
+    return render(request, 'user/sinvoice.html',{'obj2':obj2,'obj':obj})
+
+def rinvoice(request,id):
+    obj=RentOrder.objects.get(rent_o_id=id)
+    obj2=RentOrderDetails.objects.filter(rent_o=obj)
+    return render(request, 'user/rinvoice.html',{'obj2':obj2,'obj':obj})
 
 
 #----------------------------------SERVICE-----------------------------------------------
@@ -196,8 +232,10 @@ def servicecheckout(request):
     
     for cart in carts:
         cart.delete()
+    return redirect("/userprofile/")
 
-    return render(request, 'user/servicecheckout.html',{'cart':cart})
+def estimation(request):
+    return render(request, 'user/estimation.html')
 
 #--------------------------------------machinerylist-------------------------------------------------
 def machinerylist(request):
@@ -274,8 +312,8 @@ def machinerycheckout(request):
     
     for cart in carts:
         cart.delete()
+    return redirect("/userprofile/")
 
-    return render(request,'user/machinerycheckout.html',{'cart':cart})
 
 #---------------------------------------------------------------------------------------------------
 # ===================================== Admin Views =================================================
@@ -1246,8 +1284,13 @@ def productrptshow(request):
         pass
     else:
         return redirect('/login/')
-    obj = Product.objects.all()
-    return render(request, 'productrpt.html', {"Product": obj})
+    if request.method == "POST":
+        search=request.POST.get('search')
+        obj=Product.objects.filter(product_name=search)
+        return render(request, 'productrpt.html', {"Product": obj})
+    else:
+        obj = Product.objects.all()
+        return render(request, 'productrpt.html', {"Product": obj})
 
 
 def productdetailsshow2(request,id):

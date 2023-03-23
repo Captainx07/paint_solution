@@ -120,8 +120,9 @@ background:#eee;
 	}
 }
     </style>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
-<body>
+<body id="show1">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container bootstrap snippets bootdeys">
 <div class="row">
@@ -134,34 +135,35 @@ background:#eee;
 <i class="fa fa-rocket"></i>
 </div>
 <div class="col-sm-6 top-right">
-<h3 class="marginright">INVOICE-1234578</h3>
-<span class="marginright">14 April 2014</span>
+<h3 class="marginright">INVOICE</h3>
+<span class="marginright">{{obj.order_date}}</span>
 </div>
 </div>
 <hr>
 <div class="row">
 <div class="col-xs-4 from">
-<p class="lead marginbottom">From : Dynofy</p>
-<p>350 Rhode Island Street</p>
-<p>Suite 240, San Francisco</p>
-<p>California, 94103</p>
-<p>Phone: 415-767-3600</p>
-<p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="274448495346445367435e4948415e0944484a">[email&#160;protected]</a></p>
+<p class="lead marginbottom">From : J K Color And Paints</p>
+<p>Rameshwar Bridge, 15,</p>
+<p>Lal Bahadur Shastri Rd,</p>
+<p>Saijpur Bogha,Ahmedabad Gujarat 382345</p>
+<p>Gujarat 382345</p>
+<p>Phone: 073594 39003</p>
+<p>Email: </p>
 </div>
 <div class="col-xs-4 to">
-<p class="lead marginbottom">To : John Doe</p>
-<p>425 Market Street</p>
-<p>Suite 2200, San Francisco</p>
-<p>California, 94105</p>
-<p>Phone: 415-676-3600</p>
-<p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="167c797e78567279733875797b">[email&#160;protected]</a></p>
+<p class="lead marginbottom">To :{{obj.customer.customer_name}}</p>
+<p>{{obj.customer.address}}</p>
+<p>{{obj.customer.pin_code.pin_code}}</p>
+<p>{{obj.customer.pin_code.area_name}}</p>
+<p>{{obj.customer.pin_code.city.city_name}}</p>
+<p>{{obj.customer.pin_code.city.state.state_name}}</p>
+<p>Email: {{obj.customer.email_id}}</p>
 </div>
 <div class="col-xs-4 text-right payment-details">
 <p class="lead marginbottom payment-info">Payment details</p>
-<p>Date: 14 April 2014</p>
-<p>VAT: DK888-777 </p>
-<p>Total Amount: $1019</p>
-<p>Account Name: Flatter</p>
+<p>Date: {{obj.order_date}}</p>
+<p>Total Amount: {{obj.total}}</p>
+<p>Account Name: {{obj.customer.customer_name}}</p>
 </div>
 </div>
 <div class="row table-row">
@@ -171,53 +173,34 @@ background:#eee;
 <th class="text-center" style="width:5%">#</th>
 <th style="width:50%">Item</th>
 <th class="text-right" style="width:15%">Quantity</th>
-<th class="text-right" style="width:15%">Unit Price</th>
-<th class="text-right" style="width:15%">Total Price</th>
+<th class="text-right" style="width:15%">Rent Charge</th>
+<th class="text-right" style="width:15%">Total Charge</th>
 </tr>
 </thead>
 <tbody>
+{% for i in obj2 %}
 <tr>
-<td class="text-center">1</td>
-<td>Flatter Theme</td>
-<td class="text-right">10</td>
-<td class="text-right">$18</td>
-<td class="text-right">$180</td>
+<td class="text-center">{{i.rent_od_id}}</td>
+<td>{{i.rent_m.m_name}}</td>
+<td class="text-right">{{i.qty}}</td>
+<td class="text-right">{{i.rent_m_charge}}</td>
+<td class="text-right">{% widthratio i.qty 1 i.rent_m_charge %}</td>
 </tr>
-<tr>
-<td class="text-center">2</td>
-<td>Flat Icons</td>
-<td class="text-right">6</td>
-<td class="text-right">$59</td>
-<td class="text-right">$254</td>
-</tr>
-<tr>
-<td class="text-center">3</td>
-<td>Wordpress version</td>
-<td class="text-right">4</td>
-<td class="text-right">$95</td>
-<td class="text-right">$285</td>
-</tr>
-<tr class="last-row">
-<td class="text-center">4</td>
-<td>Server Deployment</td>
-<td class="text-right">1</td>
-<td class="text-right">$300</td>
-<td class="text-right">$300</td>
-</tr>
+{% endfor %}
 </tbody>
 </table>
 </div>
 <div class="row">
 <div class="col-xs-6 margintop">
 <p class="lead marginbottom">THANK YOU!</p>
-<button class="btn btn-success" id="invoice-print"><i class="fa fa-print"></i> Print Invoice</button>
-<button class="btn btn-danger"><i class="fa fa-envelope-o"></i> Mail Invoice</button>
+<button class="btn btn-success" id="invoice-print" onClick="generatePDF()"><i class="fa fa-print"></i> Print Invoice</button>
+<!--<button class="btn btn-danger"><i class="fa fa-envelope-o"></i> Mail Invoice</button>-->
 </div>
 <div class="col-xs-6 text-right pull-right invoice-total">
-<p>Subtotal : $1019</p>
+<!--<p>Subtotal : $1019</p>
 <p>Discount (10%) : $101 </p>
-<p>VAT (8%) : $73 </p>
-<p>Total : $991 </p>
+<p>VAT (8%) : $73 </p>-->
+<p>Total : {{obj.total}}</p>
 </div>
 </div>
 </div>
@@ -225,10 +208,23 @@ background:#eee;
 </div>
 </div>
 </div>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-	
-</script>
 </body>
+<script>
+	function generatePDF()
+	{
+		var element = document.getElementById('show1');
+	var opt = {
+	  margin:       1,
+	  filename:     'myfile.pdf',
+	  image:        { type: 'jpeg', quality: 0.98 },
+	  html2canvas:  { scale: 2 }, 
+	  jsPDF:        {unit: 'in', format: 'letter', orientation: 'landscape' }
+	};
+	
+	// New Promise-based usage:
+	html2pdf().set(opt).from(element).save();
+	}
+	
+	</script>
+
 </html>
