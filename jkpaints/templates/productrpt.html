@@ -4,10 +4,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body> 
+    <form method="post" action="/productrpt/">
     <h1 align="center">Products</h1>
-    <button type="submit" onclick="generatePDF()">GeneratePDF File</button>
+    <div class="hero__search__form">
+            {% csrf_token %}
+            <div class="hero__search__categories">
+                <span class="arrow_carrot-down"></span>
+            </div>
+            <input type="text" name="search" placeholder="What do yo u need?">
+            <button type="submit" class="primary-btn">SEARCH</button>
+        
+    </div>
     <table border="1" width="100%" cellspacing="1" id="show1">
-
         <thead>
             <tr style="color:black ;">
                 <th>Product Id</th>
@@ -45,6 +53,8 @@
             {% endfor %}
         </tbody>
     </table>
+</form>
+<button type="submit" onclick="generatePDF()">GeneratePDF File</button>
 </body>
 <script>
 function generatePDF()

@@ -14,6 +14,7 @@
                         <button type="button" class="btn bg-gradient-primary text-white">Add</button>
                     </a>
                     <thead>
+                        <tr><th>Product Id</th></tr>
                         <tr style="color:black ;">
                             <th>Product Details Id</th>
                             <th>Product Id</th>
@@ -25,6 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr style="color:black ;"><td>{{i.product}}</td></tr>
                         {% for i in ProductDetails %}
                         <tr style="color:black ;">
                             <td>{{i.product_d_id}}</td>
